@@ -27,8 +27,6 @@ public class EventRest {
         this.eventService = eventService;
     }
 
-
-
     @CrossOrigin
     @RequestMapping(path = "/{eventId}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateEvent(@PathVariable("eventId") String eventId,
