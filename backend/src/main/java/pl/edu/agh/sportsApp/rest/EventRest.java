@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.model.Account;
 import pl.edu.agh.sportsApp.model.Event;
@@ -25,6 +26,19 @@ public class EventRest {
     public EventRest(AccountService accountService, EventService eventService) {
         this.accountService = accountService;
         this.eventService = eventService;
+    }
+
+    @CrossOrigin
+    @PutMapping(path = "/create", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createEvent(@RequestBody Event newEvent,
+                                      @AuthenticationPrincipal final Account account){
+        if(newEvent.getTitle() == null || newEvent.getLocation() == null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+        newEvent.setOwnerAccountId(account.getId());
+        eventService.saveEvent(newEvent);
+        return new ResponseEntity<>(newEvent, HttpStatus.OK);
+
     }
 
     @CrossOrigin

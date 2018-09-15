@@ -17,6 +17,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("${path.accounts}")
 public class AccountRest {
+
     private static final String INTEGER_REGEX = "\\d{1,9}";
 
     private final AccountService accountService;

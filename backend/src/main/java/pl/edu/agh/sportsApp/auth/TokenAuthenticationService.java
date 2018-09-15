@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Primary;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.model.Account;
 import pl.edu.agh.sportsApp.service.AccountService;
@@ -28,6 +29,8 @@ final class TokenAuthenticationService implements AuthenticationService {
     UserActivityService userActivityService;
     @NonNull
     AccountService accountService;
+    @NonNull
+    BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public Optional<String> login(final String email, final String password) {
@@ -36,7 +39,7 @@ final class TokenAuthenticationService implements AuthenticationService {
 
         if(result.isPresent()) {
             Account account = result.get();
-            if (account.getPassword().equals(password)) {
+            if (passwordEncoder.matches(password, account.getPassword())) {
                 userActivityService.addActiveUser(email, result.get());
                 return Optional.of(tokenService.expiringToken(ImmutableMap.of("username", email)));
             }
