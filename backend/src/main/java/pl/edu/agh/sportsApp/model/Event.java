@@ -1,8 +1,7 @@
 package pl.edu.agh.sportsApp.model;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,25 +10,26 @@ import javax.persistence.Id;
 
 @NoArgsConstructor
 @Entity(name = "event")
+@Data
 public class Event {
 
-    @Getter
     @Column
     @Id
     @GeneratedValue
     private int id;
 
     @Column
-    @Getter @Setter
     private String title;
 
     @Column
-    @Getter @Setter
     private String location;
 
     @Column(length = 5000)
-    @Getter @Setter
     private String content;
+
+    // full Account? or id
+    @Column
+    private int ownerAccountId;
 
     public Event(String title, String location, String content) {
         this.location = location;

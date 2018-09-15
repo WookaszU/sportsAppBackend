@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
@@ -113,4 +114,5 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     AuthenticationEntryPoint forbiddenEntryPoint() {
         return new HttpStatusEntryPoint(FORBIDDEN);
     }
+
 }
