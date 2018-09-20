@@ -8,6 +8,7 @@ import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.sportsApp.config.YAMLConfig;
 import pl.edu.agh.sportsApp.emailsender.tokengenerator.TokenGenerator;
 import pl.edu.agh.sportsApp.model.Account;
 
@@ -29,22 +30,30 @@ public class EmailSender implements IEmailSender {
 
     String host;
     String port;
+    String hostName;
+
     String REPLY_TO;
     String SET_FROM;
     String REGISTER_EMAIL_TITLE;
 
+    YAMLConfig config;
+
     @Autowired
     public EmailSender(JavaMailSender mailSender,
                        TokenGenerator tokenGenerator,
+                       YAMLConfig config,
                        @Value("${local.server.host}") String host,
                        @LocalServerPort String port,
+                       @Value("${local.server.hostName}") String hostName,
                        @Value("${app.mail.replyto}") String REPLY_TO,
                        @Value("${app.mail.setfrom}") String SET_FROM,
                        @Value("${app.mail.registertitle}") String REGISTER_EMAIL_TITLE) {
         this.mailSender = mailSender;
         this.tokenGenerator = tokenGenerator;
+        this.config = config;
         this.host = host;
         this.port = port;
+        this.hostName = hostName;
         this.REPLY_TO = REPLY_TO;
         this.SET_FROM = SET_FROM;
         this.REGISTER_EMAIL_TITLE = REGISTER_EMAIL_TITLE;
@@ -62,8 +71,8 @@ public class EmailSender implements IEmailSender {
         MimeMessage mail = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mail, true);
         helper.setTo(destination);
-        helper.setReplyTo(REPLY_TO);
-        helper.setFrom(SET_FROM);
+        helper.setReplyTo(config.getReplyTo());
+        helper.setFrom(config.getSetFrom());
         helper.setSubject(title);
         helper.setText(content);
 
@@ -73,7 +82,8 @@ public class EmailSender implements IEmailSender {
     @Override
     public String sendRegisterEmail(Account newAccount) throws MessagingException {
         String registerToken = tokenGenerator.generate(newAccount);
-        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, host + ":" + port + REGISTER_LINK + registerToken);
+//        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, host + ":" + port + REGISTER_LINK + registerToken);
+        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, hostName + REGISTER_LINK + registerToken);
         return registerToken;
     }
 }
