@@ -1,0 +1,6 @@
+spring:
+    profiles: prod
+username: ${ENV_EMAIL}
+password: ${ENV_EMAIL_PASS}
+replyTo: ${ENV_REPLY_TO}
+setFrom: ${ENV_SEND_FROM}
