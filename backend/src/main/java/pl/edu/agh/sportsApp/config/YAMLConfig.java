@@ -15,9 +15,10 @@ import org.springframework.context.annotation.Configuration;
 public class YAMLConfig {
 
     String environment;
-    String username;
+    String login;
     String password;
     String replyTo;
     String setFrom;
+    String appURL;
 
 }

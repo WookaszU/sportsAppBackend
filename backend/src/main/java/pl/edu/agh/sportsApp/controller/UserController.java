@@ -1,5 +1,6 @@
 package pl.edu.agh.sportsApp.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -22,15 +23,16 @@ final class UserController {
     @NonNull
     AuthenticationService authentication;
 
+    @ApiOperation(value="Get current user info.")
     @GetMapping("/current")
     Account getCurrent(@AuthenticationPrincipal final Account account) {
         return account;
     }
 
+    @ApiOperation(value="Logout from application.")
     @GetMapping("/logout")
     boolean logout(@AuthenticationPrincipal final Account account) {
-        authentication.logout(account);
-        return true;
+        return authentication.logout(account).isPresent();
     }
 
 }

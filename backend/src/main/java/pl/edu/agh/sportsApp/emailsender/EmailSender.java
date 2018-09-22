@@ -27,35 +27,17 @@ public class EmailSender implements IEmailSender {
     JavaMailSender  mailSender;
     TokenGenerator tokenGenerator;
     String REGISTER_LINK = "/public/users/confirm/";
-
-    String host;
-    String port;
-    String hostName;
-
-    String REPLY_TO;
-    String SET_FROM;
     String REGISTER_EMAIL_TITLE;
-
     YAMLConfig config;
 
     @Autowired
     public EmailSender(JavaMailSender mailSender,
                        TokenGenerator tokenGenerator,
                        YAMLConfig config,
-                       @Value("${local.server.host}") String host,
-                       @LocalServerPort String port,
-                       @Value("${local.server.hostName}") String hostName,
-                       @Value("${app.mail.replyto}") String REPLY_TO,
-                       @Value("${app.mail.setfrom}") String SET_FROM,
                        @Value("${app.mail.registertitle}") String REGISTER_EMAIL_TITLE) {
         this.mailSender = mailSender;
         this.tokenGenerator = tokenGenerator;
         this.config = config;
-        this.host = host;
-        this.port = port;
-        this.hostName = hostName;
-        this.REPLY_TO = REPLY_TO;
-        this.SET_FROM = SET_FROM;
         this.REGISTER_EMAIL_TITLE = REGISTER_EMAIL_TITLE;
     }
 
@@ -82,8 +64,7 @@ public class EmailSender implements IEmailSender {
     @Override
     public String sendRegisterEmail(Account newAccount) throws MessagingException {
         String registerToken = tokenGenerator.generate(newAccount);
-//        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, host + ":" + port + REGISTER_LINK + registerToken);
-        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, hostName + REGISTER_LINK + registerToken);
+        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, config.getAppURL() + REGISTER_LINK + registerToken);
         return registerToken;
     }
 }

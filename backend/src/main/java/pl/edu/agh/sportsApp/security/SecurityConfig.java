@@ -24,6 +24,7 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 import static java.util.Objects.requireNonNull;
 import static lombok.AccessLevel.PRIVATE;
@@ -36,8 +37,18 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+//    private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
+//            new AntPathRequestMatcher("/public/**")
+//    );
+
     private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/public/**")
+            Arrays.asList(
+                    new AntPathRequestMatcher("/public/**"),
+                    new AntPathRequestMatcher("/v2/api-docs"),
+                    new AntPathRequestMatcher("/configuration/ui"),
+                    new AntPathRequestMatcher("/swagger-resources/**"),
+                    new AntPathRequestMatcher("/swagger-ui.html"),
+                    new AntPathRequestMatcher("/webjars/**"))
     );
 
     private static final RequestMatcher PROTECTED_URLS = new NegatedRequestMatcher(PUBLIC_URLS);

@@ -1,11 +1,8 @@
 package pl.edu.agh.sportsApp.emailsender;
 
-
 import lombok.AccessLevel;
-import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -23,7 +20,7 @@ public class EmailSenderConfig {
     Environment env;
 
     @Autowired
-    YAMLConfig yamlConfig;
+    YAMLConfig config;
 
     @Bean("javaMailSender")
     public JavaMailSender getJavaMailSender() {
@@ -31,8 +28,8 @@ public class EmailSenderConfig {
         mailSender.setHost(env.getProperty("spring.mail.host"));
         mailSender.setPort(Integer.parseInt(env.getProperty("spring.mail.port")));
 
-        mailSender.setUsername(yamlConfig.getUsername());
-        mailSender.setPassword(yamlConfig.getPassword());
+        mailSender.setUsername(config.getLogin());
+        mailSender.setPassword(config.getPassword());
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
