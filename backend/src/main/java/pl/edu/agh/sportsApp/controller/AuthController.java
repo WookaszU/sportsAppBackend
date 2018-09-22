@@ -1,5 +1,6 @@
 package pl.edu.agh.sportsApp.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -40,6 +41,7 @@ final class AuthController {
     @NonNull
     BCryptPasswordEncoder passwordEncoder;
 
+    @ApiOperation(value="Register new account. After registration confirm email...")
     @PostMapping("/register")
     RegisterResponse register(@RequestBody final Account account) {
 
@@ -64,6 +66,7 @@ final class AuthController {
 
     }
 
+    @ApiOperation(value="Email confirmation link clicked. Enable account.")
     @GetMapping("/confirm/{token}")
     RegisterResponse registrationConfirm(@PathVariable("token") final String registerToken){
 
@@ -83,6 +86,7 @@ final class AuthController {
                 .build();
     }
 
+    @ApiOperation(value="Resend a confirm email.")
     @PostMapping("/confirm/resend")
     RegisterResponse resendRegistrationEmail(@RequestBody final ResendEmailRequest request){
 
@@ -106,13 +110,26 @@ final class AuthController {
 
     }
 
+    @ApiOperation(value="Login to app. Returns token.")
     @PostMapping("/login")
-    ResponseEntity login(@RequestBody final Account account) {
-        Optional<String> tokenOpt = authentication.login(account.getEmail(), account.getPassword());
+    ResponseEntity login(@RequestBody final Account request) {
+
+        Optional<Account> accountOpt = accountService.getAccountByEmail(request.getEmail());
+        if(!accountOpt.isPresent())
+            return new ResponseEntity<>(ResponseCode.WRONG_LOGIN_OR_PASSWORD, HttpStatus.BAD_REQUEST);
+
+        Account account = accountOpt.get();
+
+        if(!account.isEnabled())
+            return new ResponseEntity<>(ResponseCode.CONFIRM_YOUR_ACCOUNT, HttpStatus.BAD_REQUEST);
+
+        Optional<String> tokenOpt = authentication.login(account, request.getEmail(), request.getPassword());
+
         if(tokenOpt.isPresent())
             return new ResponseEntity<>(tokenOpt.get(), HttpStatus.OK);
         else
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ResponseCode.WRONG_LOGIN_OR_PASSWORD ,HttpStatus.BAD_REQUEST);
+
     }
 
 }

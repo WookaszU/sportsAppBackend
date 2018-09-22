@@ -1,6 +1,5 @@
 package pl.edu.agh.sportsApp.service;
 
-
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

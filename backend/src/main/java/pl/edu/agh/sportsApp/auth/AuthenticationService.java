@@ -10,11 +10,12 @@ public interface AuthenticationService {
     /**
      * Logs in with the given {@code username} and {@code password}.
      *
+     * @param account
      * @param email
      * @param password
      * @return an {@link Optional} of a user when login succeeds
      */
-    Optional<String> login(String email, String password);
+    Optional<String> login(Account account, String email, String password);
 
     /**
      * Finds a user by its dao-key.
@@ -29,5 +30,5 @@ public interface AuthenticationService {
      *
      * @param account the account to logout
      */
-    void logout(Account account);
+    Optional<Account> logout(Account account);
 }
