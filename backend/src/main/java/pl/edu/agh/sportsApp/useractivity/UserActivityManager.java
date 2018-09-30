@@ -10,7 +10,7 @@ import java.util.Optional;
 import static java.util.Optional.ofNullable;
 
 @Service
-public class UserActivityService {
+public class UserActivityManager {
 
     private final Map<String, UserActivityData> activeUsers = new HashMap<>();
 
