@@ -3,8 +3,8 @@ package pl.edu.agh.sportsApp.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import org.assertj.core.util.Lists;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,36 +19,39 @@ import static java.util.Objects.requireNonNull;
 @Entity(name = "account")
 @NoArgsConstructor
 @Data
+@FieldDefaults(level= AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
 public class Account implements UserDetails {
 
     @Column(name = "account_id")
     @Id
     @GeneratedValue
     @JsonIgnore
-    private int id;
+    int id;
 
     @Column(name = "email", nullable = false)
-    private String email;
+    String email;
 
     @Column(name = "password", nullable = false)
-    private String password;
+    String password;
 
     @Column(name = "enabled", nullable = false)
-    private boolean enabled;
+    boolean enabled;
 
     @Column(name = "firstName", nullable = false)
-    private String firstName;
+    String firstName;
 
     @Column(name = "lastName", nullable = false)
-    private String lastName;
+    String lastName;
 
     @Lob
     @Column(name = "image", length = Integer.MAX_VALUE)
-    private byte[] image;
+    byte[] image;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "account_event", joinColumns = {@JoinColumn(name = "account_id")})
-    private List<Event> events;
+    List<Event> events;
 
     public Account(String email, String firstName, String lastName) {
         this.email = email;

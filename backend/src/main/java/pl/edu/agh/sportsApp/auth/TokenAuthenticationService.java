@@ -9,7 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.model.Account;
 import pl.edu.agh.sportsApp.useractivity.UserActivityData;
-import pl.edu.agh.sportsApp.useractivity.UserActivityService;
+import pl.edu.agh.sportsApp.useractivity.UserActivityManager;
 import pl.edu.agh.sportsApp.token.TokenService;
 
 import java.util.Optional;
@@ -26,7 +26,7 @@ final class TokenAuthenticationService implements AuthenticationService {
     @NonNull
     TokenService tokenService;
     @NonNull
-    UserActivityService userActivityService;
+    UserActivityManager userActivityManager;
     @NonNull
     BCryptPasswordEncoder passwordEncoder;
 
@@ -35,7 +35,7 @@ final class TokenAuthenticationService implements AuthenticationService {
 
         if (passwordEncoder.matches(password, account.getPassword())) {
             String token = tokenService.expiringToken(ImmutableMap.of("username", email));
-            userActivityService.addActiveUser(email, account, token);
+            userActivityManager.addActiveUser(email, account, token);
             return Optional.of(token);
         }
 
@@ -47,7 +47,7 @@ final class TokenAuthenticationService implements AuthenticationService {
         Optional<UserActivityData> userActivityDataOpt = Optional
                 .of(tokenService.verify(token))
                 .map(map -> map.get("username"))
-                .flatMap(userActivityService::findByUsername);
+                .flatMap(userActivityManager::findByUsername);
 
         if(!userActivityDataOpt.isPresent() || !userActivityDataOpt.get().getToken().equals(token))
             return Optional.empty();
@@ -57,7 +57,7 @@ final class TokenAuthenticationService implements AuthenticationService {
 
     @Override
     public Optional<Account> logout(final Account account) {
-        return userActivityService.removeActiveUser(account);
+        return userActivityManager.removeActiveUser(account);
     }
 
 }

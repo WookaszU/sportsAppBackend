@@ -1,15 +1,16 @@
-package pl.edu.agh.sportsApp.controller.Messages;
+package pl.edu.agh.sportsApp.controller.dto;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@Builder
 @FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
-public class RegisterResponse {
+public class RegisterRequest {
 
-    ResponseCode code;
+    String email;
+    String password;
+    String firstName;
+    String lastName;
 
 }

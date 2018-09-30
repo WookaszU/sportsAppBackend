@@ -9,9 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
-import pl.edu.agh.sportsApp.controller.Messages.RegisterResponse;
-import pl.edu.agh.sportsApp.controller.Messages.ResendEmailRequest;
-import pl.edu.agh.sportsApp.controller.Messages.ResponseCode;
+import pl.edu.agh.sportsApp.controller.dto.*;
 import pl.edu.agh.sportsApp.model.Account;
 import pl.edu.agh.sportsApp.model.token.Token;
 import pl.edu.agh.sportsApp.service.AccountService;
@@ -43,25 +41,28 @@ final class AuthController {
 
     @ApiOperation(value="Register new account. After registration confirm email...")
     @PostMapping("/register")
-    RegisterResponse register(@RequestBody final Account account) {
+    ResponseEntity register(@RequestBody final RegisterRequest registerRequest) {
 
-        Optional<Account> accountExist = accountService.getAccountByEmail(account.getEmail());
+        if(registerRequest.getEmail() == null || registerRequest.getFirstName() == null ||
+                registerRequest.getLastName() == null || registerRequest.getPassword() == null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+        Optional<Account> accountExist = accountService.getAccountByEmail(registerRequest.getEmail());
 
         if(accountExist.isPresent())
-            return RegisterResponse.builder()
-                    .code(ResponseCode.ALREADY_REGISTERED)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.ALREADY_REGISTERED, HttpStatus.CONFLICT);
 
         try {
-            account.setPassword(passwordEncoder.encode(account.getPassword()));
+            Account account = Account.builder()
+                    .email(registerRequest.getEmail())
+                    .password(passwordEncoder.encode(registerRequest.getPassword()))
+                    .firstName(registerRequest.getFirstName())
+                    .lastName(registerRequest.getLastName())
+                    .build();
             registerService.register(account);
-            return RegisterResponse.builder()
-                    .code(ResponseCode.SUCCESS)
-                    .build();
+            return new ResponseEntity(HttpStatus.OK);
         } catch (MessagingException e) {
-            return RegisterResponse.builder()
-                    .code(ResponseCode.EMAIL_ERROR)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.EMAIL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -112,7 +113,10 @@ final class AuthController {
 
     @ApiOperation(value="Login to app. Returns token.")
     @PostMapping("/login")
-    ResponseEntity login(@RequestBody final Account request) {
+    ResponseEntity login(@RequestBody final LoginRequest request) {
+
+        if(request.getEmail() == null || request.getPassword() == null)
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
         Optional<Account> accountOpt = accountService.getAccountByEmail(request.getEmail());
         if(!accountOpt.isPresent())

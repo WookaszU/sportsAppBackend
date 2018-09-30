@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.controller.Messages;
+package pl.edu.agh.sportsApp.controller.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;
