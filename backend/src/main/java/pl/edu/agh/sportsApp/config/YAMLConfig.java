@@ -20,5 +20,6 @@ public class YAMLConfig {
     String replyTo;
     String setFrom;
     String appURL;
+    String mediaStorageURL;
 
 }

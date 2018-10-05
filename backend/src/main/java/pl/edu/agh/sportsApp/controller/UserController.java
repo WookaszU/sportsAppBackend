@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
 import pl.edu.agh.sportsApp.model.Account;
+import springfox.documentation.annotations.ApiIgnore;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
@@ -25,13 +26,13 @@ final class UserController {
 
     @ApiOperation(value="Get current user info.")
     @GetMapping("/current")
-    Account getCurrent(@AuthenticationPrincipal final Account account) {
+    Account getCurrent(@ApiIgnore @AuthenticationPrincipal final Account account) {
         return account;
     }
 
     @ApiOperation(value="Logout from application.")
     @GetMapping("/logout")
-    boolean logout(@AuthenticationPrincipal final Account account) {
+    boolean logout(@ApiIgnore @AuthenticationPrincipal final Account account) {
         return authentication.logout(account).isPresent();
     }
 

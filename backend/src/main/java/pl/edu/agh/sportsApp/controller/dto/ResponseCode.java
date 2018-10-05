@@ -10,6 +10,10 @@ public enum ResponseCode {
 
     CONFIRM_YOUR_ACCOUNT,   // "Confirm your new account."
     ACCOUNT_NOT_EXISTS,      // "Account not exists."
-    WRONG_LOGIN_OR_PASSWORD  // "Wrong login or password."
+    WRONG_LOGIN_OR_PASSWORD,  // "Wrong login or password."
+
+    EMPTY_FILE,
+    INVALID_IMAGE_PROPORTIONS,
+    FILE_TOO_BIG
 
 }

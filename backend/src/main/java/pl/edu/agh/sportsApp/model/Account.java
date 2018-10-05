@@ -45,9 +45,8 @@ public class Account implements UserDetails {
     @Column(name = "lastName", nullable = false)
     String lastName;
 
-    @Lob
-    @Column(name = "image", length = Integer.MAX_VALUE)
-    byte[] image;
+    @OneToOne(fetch=FetchType.LAZY)
+    Photo userPhoto;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "account_event", joinColumns = {@JoinColumn(name = "account_id")})
