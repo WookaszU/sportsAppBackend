@@ -4,8 +4,10 @@ import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
@@ -47,6 +49,9 @@ final class AuthController {
                 registerRequest.getLastName() == null || registerRequest.getPassword() == null)
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
 
+        if(!EmailValidator.getInstance().isValid(registerRequest.getEmail()))
+            return new ResponseEntity<>(ResponseCode.WRONG_EMAIL, HttpStatus.BAD_REQUEST);
+
         Optional<Account> accountExist = accountService.getAccountByEmail(registerRequest.getEmail());
 
         if(accountExist.isPresent())
@@ -61,7 +66,7 @@ final class AuthController {
                     .build();
             registerService.register(account);
             return new ResponseEntity(HttpStatus.OK);
-        } catch (MessagingException e) {
+        } catch (MessagingException | MailAuthenticationException e) {
             return new ResponseEntity<>(ResponseCode.EMAIL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -69,44 +74,35 @@ final class AuthController {
 
     @ApiOperation(value="Email confirmation link clicked. Enable account.")
     @GetMapping("/confirm/{token}")
-    RegisterResponse registrationConfirm(@PathVariable("token") final String registerToken){
+    ResponseEntity registrationConfirm(@PathVariable("token") final String registerToken){
 
         Optional<Token> tokenOpt = tokenStorage.getTokenByValue(registerToken);
         if(!tokenOpt.isPresent())
-            return RegisterResponse.builder()
-                    .code(ResponseCode.TOKEN_NOT_FOUND)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.TOKEN_NOT_FOUND, HttpStatus.BAD_REQUEST);
 
         if(!registerService.confirm(tokenOpt.get()))
-            return RegisterResponse.builder()
-                    .code(ResponseCode.TOKEN_EXPIRED)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.TOKEN_EXPIRED, HttpStatus.BAD_REQUEST);
 
-        return RegisterResponse.builder()
-                .code(ResponseCode.SUCCESS)
-                .build();
+        return new ResponseEntity<>(ResponseCode.SUCCESS, HttpStatus.OK);
     }
 
     @ApiOperation(value="Resend a confirm email.")
     @PostMapping("/confirm/resend")
-    RegisterResponse resendRegistrationEmail(@RequestBody final ResendEmailRequest request){
+    ResponseEntity resendRegistrationEmail(@RequestBody final ResendEmailRequest request){
+
+        if(!EmailValidator.getInstance().isValid(request.getEmail()))
+            return new ResponseEntity<>(ResponseCode.WRONG_EMAIL, HttpStatus.BAD_REQUEST);
 
         Optional<Token> previousTokenOpt = tokenStorage.findByRelatedAccountEmail(request.getEmail());
 
         if(!previousTokenOpt.isPresent())
-            return RegisterResponse.builder()
-                    .code(ResponseCode.TOKEN_NOT_FOUND)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.NOT_REGISTERED, HttpStatus.BAD_REQUEST);
 
         try {
             registerService.resendEmail(previousTokenOpt.get());
-            return RegisterResponse.builder()
-                    .code(ResponseCode.SUCCESS)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.SUCCESS, HttpStatus.OK);
         } catch (MessagingException e) {
-            return RegisterResponse.builder()
-                    .code(ResponseCode.EMAIL_ERROR)
-                    .build();
+            return new ResponseEntity<>(ResponseCode.EMAIL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

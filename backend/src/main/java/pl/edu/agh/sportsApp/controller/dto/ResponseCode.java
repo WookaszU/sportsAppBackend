@@ -5,7 +5,9 @@ public enum ResponseCode {
     SUCCESS,                // "OK"
     EMAIL_ERROR,            // "Confirmation email could not be send."
     ALREADY_REGISTERED,     // "User with this email already registered."
+    WRONG_EMAIL,            // "Typed email is not an email."
     TOKEN_NOT_FOUND,        // "Token not found in database."
+    NOT_REGISTERED,         // "No email resend, not registered before."
     TOKEN_EXPIRED,
 
     CONFIRM_YOUR_ACCOUNT,   // "Confirm your new account."

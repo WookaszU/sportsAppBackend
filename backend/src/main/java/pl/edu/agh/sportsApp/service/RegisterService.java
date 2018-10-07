@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.dateservice.DateService;
 import pl.edu.agh.sportsApp.emailsender.EmailSender;
@@ -29,7 +30,7 @@ public class RegisterService {
     DateService dateService;
 
 
-    public void register(Account account) throws MessagingException {
+    public void register(Account account) throws MessagingException, MailAuthenticationException {
         account.setEnabled(false);
         Account newAccount = accountService.saveAccount(account);
 

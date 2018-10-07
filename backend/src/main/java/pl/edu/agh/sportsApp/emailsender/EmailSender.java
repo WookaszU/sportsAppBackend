@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -42,7 +43,8 @@ public class EmailSender implements IEmailSender {
     }
 
     @Override
-    public void send(String destination, String title, String content) throws MessagingException {
+    public void send(String destination, String title, String content)
+            throws MessagingException, MailAuthenticationException {
 
         try {
             System.out.println(InetAddress.getLocalHost().getHostAddress());
@@ -62,7 +64,7 @@ public class EmailSender implements IEmailSender {
     }
 
     @Override
-    public String sendRegisterEmail(Account newAccount) throws MessagingException {
+    public String sendRegisterEmail(Account newAccount) throws MessagingException, MailAuthenticationException {
         String registerToken = tokenGenerator.generate(newAccount);
         send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, config.getAppURL() + REGISTER_LINK + registerToken);
         return registerToken;
