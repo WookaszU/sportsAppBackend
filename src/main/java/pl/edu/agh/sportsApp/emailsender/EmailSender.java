@@ -26,18 +26,15 @@ import static lombok.AccessLevel.PRIVATE;
 public class EmailSender implements IEmailSender {
 
     JavaMailSender  mailSender;
-    TokenGenerator tokenGenerator;
     String REGISTER_LINK = "/public/users/confirm/";
     String REGISTER_EMAIL_TITLE;
     YAMLConfig config;
 
     @Autowired
     public EmailSender(JavaMailSender mailSender,
-                       TokenGenerator tokenGenerator,
                        YAMLConfig config,
                        @Value("${app.mail.registertitle}") String REGISTER_EMAIL_TITLE) {
         this.mailSender = mailSender;
-        this.tokenGenerator = tokenGenerator;
         this.config = config;
         this.REGISTER_EMAIL_TITLE = REGISTER_EMAIL_TITLE;
     }
@@ -64,9 +61,7 @@ public class EmailSender implements IEmailSender {
     }
 
     @Override
-    public String sendRegisterEmail(Account newAccount) throws MessagingException, MailAuthenticationException {
-        String registerToken = tokenGenerator.generate(newAccount);
-        send(newAccount.getEmail(), REGISTER_EMAIL_TITLE, config.getAppURL() + REGISTER_LINK + registerToken);
-        return registerToken;
+    public void sendRegisterEmail(String email, String registerToken) throws MessagingException, MailAuthenticationException {
+        send(email, REGISTER_EMAIL_TITLE, config.getAppURL() + REGISTER_LINK + registerToken);
     }
 }

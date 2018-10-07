@@ -9,6 +9,6 @@ public interface IEmailSender {
 
     void send(String to, String title, String content) throws MessagingException;
 
-    String sendRegisterEmail(Account newAccount) throws MessagingException;
+    void sendRegisterEmail(String email, String registerToken) throws MessagingException;
 
 }
