@@ -40,7 +40,7 @@ final class UserController {
     }
 
     @ApiOperation(value="Unregister from application.")
-    @GetMapping("/unregister")
+    @DeleteMapping("/unregister")
     void unregister(@ApiIgnore @AuthenticationPrincipal final Account account) {
         accountService.removeAccount(account.getId());
     }
