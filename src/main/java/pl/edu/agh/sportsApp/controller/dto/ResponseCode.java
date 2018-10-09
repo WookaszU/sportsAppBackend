@@ -8,7 +8,8 @@ public enum ResponseCode {
     WRONG_EMAIL,            // "Typed email is not an email."
     TOKEN_NOT_FOUND,        // "Token not found in database."
     NOT_REGISTERED,         // "No email resend, not registered before."
-    TOKEN_EXPIRED,
+    TOKEN_EXPIRED,          // "Expired token."
+    EMPTY_FIELDS,           // "Fill all required fields in request form."
 
     CONFIRM_YOUR_ACCOUNT,   // "Confirm your new account."
     ACCOUNT_NOT_EXISTS,      // "Account not exists."
@@ -16,6 +17,7 @@ public enum ResponseCode {
 
     EMPTY_FILE,
     INVALID_IMAGE_PROPORTIONS,
-    FILE_TOO_BIG
+    FILE_TOO_BIG,
+    MEDIA_SERVICE_INACCESIBLE   // "Multimedia service is inaccessible now."
 
 }

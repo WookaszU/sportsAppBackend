@@ -47,7 +47,7 @@ final class AuthController {
 
         if(registerRequest.getEmail() == null || registerRequest.getFirstName() == null ||
                 registerRequest.getLastName() == null || registerRequest.getPassword() == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ResponseCode.EMPTY_FIELDS, HttpStatus.BAD_REQUEST);
 
         if(!EmailValidator.getInstance().isValid(registerRequest.getEmail()))
             return new ResponseEntity<>(ResponseCode.WRONG_EMAIL, HttpStatus.BAD_REQUEST);
@@ -65,7 +65,7 @@ final class AuthController {
                     .lastName(registerRequest.getLastName())
                     .build();
             registerService.register(account);
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<>(ResponseCode.SUCCESS, HttpStatus.OK);
         } catch (MessagingException | MailAuthenticationException e) {
             return new ResponseEntity<>(ResponseCode.EMAIL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -112,7 +112,7 @@ final class AuthController {
     ResponseEntity login(@RequestBody final LoginRequest request) {
 
         if(request.getEmail() == null || request.getPassword() == null)
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ResponseCode.EMPTY_FIELDS, HttpStatus.BAD_REQUEST);
 
         Optional<Account> accountOpt = accountService.getAccountByEmail(request.getEmail());
         if(!accountOpt.isPresent())

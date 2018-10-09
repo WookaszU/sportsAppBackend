@@ -98,7 +98,7 @@ public class PhotoController {
         } catch (InvalidPhotoProportionsException e) {
             return new ResponseEntity<>(ResponseCode.INVALID_IMAGE_PROPORTIONS, HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(ResponseCode.MEDIA_SERVICE_INACCESIBLE, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(photo.getPhotoId(), HttpStatus.OK);
