@@ -22,7 +22,7 @@ public class EventService {
     public List<Event> getEvents(){return eventRepository.findAll();}
 
     public Optional<Event> getEvent(int id) {
-        return Optional.ofNullable(eventRepository.findById(id));
+        return eventRepository.findById(id);
     }
 
     public void removeEvent(Event event) {

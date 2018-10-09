@@ -3,16 +3,14 @@ package pl.edu.agh.sportsApp.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.agh.sportsApp.model.Account;
+import pl.edu.agh.sportsApp.model.ChatMessage;
 
-import java.util.Optional;
+import java.util.List;
 
 @Repository
 @Transactional
-public interface AccountRepository extends CrudRepository<Account, Integer> {
+public interface ChatMessageRepository extends CrudRepository<ChatMessage, Integer> {
 
-    void removeAccountById(Integer accountID);
-
-    Account findByEmail(String email);
+    List<ChatMessage> getByConversationIdOrderByCreationTime(int conversationId);
 
 }

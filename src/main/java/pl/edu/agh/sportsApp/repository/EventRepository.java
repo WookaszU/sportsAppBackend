@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 @Transactional
 public interface EventRepository extends CrudRepository<Event, Integer> {
-    Event findById(Integer eventId);
 
     void removeEventById(Integer eventId);
 
