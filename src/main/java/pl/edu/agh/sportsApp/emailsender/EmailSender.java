@@ -4,14 +4,11 @@ package pl.edu.agh.sportsApp.emailsender;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.config.YAMLConfig;
-import pl.edu.agh.sportsApp.emailsender.tokengenerator.TokenGenerator;
-import pl.edu.agh.sportsApp.model.Account;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

@@ -20,7 +20,7 @@ public class AccountService {
     AccountRepository accountRepository;
 
     public Optional<Account> getAccountById(Integer id){
-        return Optional.ofNullable(accountRepository.findById(id));
+        return accountRepository.findById(id);
     }
 
     public Account saveAccount(Account account) {

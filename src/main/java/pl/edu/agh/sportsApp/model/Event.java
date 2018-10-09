@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Entity(name = "event")
@@ -30,6 +31,9 @@ public class Event {
     // full Account? or id
     @Column
     private int ownerAccountId;
+
+//    @Column
+//    private LocalDateTime creationTimestamp;
 
     public Event(String title, String location, String content) {
         this.location = location;
