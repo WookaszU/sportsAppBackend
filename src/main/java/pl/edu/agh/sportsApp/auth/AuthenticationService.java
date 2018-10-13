@@ -1,7 +1,11 @@
 package pl.edu.agh.sportsApp.auth;
 
 
-import pl.edu.agh.sportsApp.model.Account;
+import pl.edu.agh.sportsApp.dto.LoginRequestDTO;
+import pl.edu.agh.sportsApp.dto.RegisterRequestDTO;
+import pl.edu.agh.sportsApp.dto.ResendEmailRequestDTO;
+import pl.edu.agh.sportsApp.dto.UserTokenState;
+import pl.edu.agh.sportsApp.model.User;
 
 import java.util.Optional;
 
@@ -10,25 +14,29 @@ public interface AuthenticationService {
     /**
      * Logs in with the given {@code username} and {@code password}.
      *
-     * @param account
-     * @param email
-     * @param password
-     * @return an {@link Optional} of a user when login succeeds
+     * @param requestDTO
+     * @return a {@link UserTokenState} of a user when login succeeds
      */
-    Optional<String> login(Account account, String email, String password);
+    UserTokenState login(LoginRequestDTO requestDTO);
 
     /**
      * Finds a user by its dao-key.
      *
      * @param token user dao key
-     * @return user Account data
+     * @return user User data
      */
-    Optional<Account> findByToken(String token);
+    Optional<User> findByToken(String token);
 
     /**
      * Logs out the given input {@code user}.
      *
-     * @param account the account to logout
+     * @param user the user to logout
      */
-    Optional<Account> logout(Account account);
+    Optional<User> logout(User user);
+
+    void register(RegisterRequestDTO registerRequestDTO);
+
+    void registrationConfirm(String registerToken);
+
+    void resendRegistrationEmail(ResendEmailRequestDTO resendEmailRequestDTO);
 }

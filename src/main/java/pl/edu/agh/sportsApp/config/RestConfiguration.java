@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.rest;
+package pl.edu.agh.sportsApp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

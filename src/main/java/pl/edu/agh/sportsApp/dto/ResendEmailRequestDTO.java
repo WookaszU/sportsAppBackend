@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.controller.dto;
+package pl.edu.agh.sportsApp.dto;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -6,10 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
-@Getter @Setter
+@Getter
+@Setter
 @RequiredArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
-public class ResendEmailRequest {
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+public class ResendEmailRequestDTO {
 
     String email;
 

@@ -14,7 +14,7 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
                 .simpSubscribeDestMatchers("/topic/**").permitAll()
                 .simpSubscribeDestMatchers("/user/queue/errors").permitAll()
                 .simpDestMatchers("/sportsapp/**").permitAll()
-                .simpDestMatchers("/queue/**","/topic/**").denyAll();
+                .simpDestMatchers("/queue/**", "/topic/**").denyAll();
     }
 
     // TODO change to false, then it is required to send csrf token in header

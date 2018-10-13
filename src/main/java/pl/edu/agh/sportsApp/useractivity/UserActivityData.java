@@ -2,17 +2,16 @@ package pl.edu.agh.sportsApp.useractivity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import pl.edu.agh.sportsApp.model.Account;
+import pl.edu.agh.sportsApp.model.User;
 
-@Getter @Setter
+@Data
 @AllArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserActivityData {
 
     String token;
-    Account account;
+    User user;
 
 }

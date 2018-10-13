@@ -10,12 +10,12 @@ import java.util.TimeZone;
 public class DateServiceConfig {
 
     @Bean
-    DateService dataService(){
+    DateService dataService() {
         return new DateServiceImpl(defaultTimeZone());
     }
 
     @Bean
-    ZoneId defaultTimeZone(){
+    ZoneId defaultTimeZone() {
         return TimeZone.getTimeZone("UTC").toZoneId();
     }
 

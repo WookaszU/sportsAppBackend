@@ -1,16 +1,12 @@
 package pl.edu.agh.sportsApp.repository;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.JpaRepository;
 import pl.edu.agh.sportsApp.model.ChatMessage;
 
 import java.util.List;
 
-@Repository
-@Transactional
-public interface ChatMessageRepository extends CrudRepository<ChatMessage, Integer> {
+public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-    List<ChatMessage> getByConversationIdOrderByCreationTime(int conversationId);
+    List<ChatMessage> getByConversationIdOrderByCreationTime(Long conversationId);
 
 }

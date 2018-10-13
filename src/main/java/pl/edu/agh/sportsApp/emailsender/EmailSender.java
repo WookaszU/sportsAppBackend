@@ -9,10 +9,11 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.config.YAMLConfig;
+import pl.edu.agh.sportsApp.dto.ResponseCode;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ServerMailException;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -22,7 +23,7 @@ import static lombok.AccessLevel.PRIVATE;
 @FieldDefaults(level = PRIVATE, makeFinal = true)
 public class EmailSender implements IEmailSender {
 
-    JavaMailSender  mailSender;
+    JavaMailSender mailSender;
     String REGISTER_LINK = "/public/users/confirm/";
     String REGISTER_EMAIL_TITLE;
     YAMLConfig config;
@@ -58,7 +59,11 @@ public class EmailSender implements IEmailSender {
     }
 
     @Override
-    public void sendRegisterEmail(String email, String registerToken) throws MessagingException, MailAuthenticationException {
-        send(email, REGISTER_EMAIL_TITLE, config.getAppURL() + REGISTER_LINK + registerToken);
+    public void sendRegisterEmail(String email, String registerToken) {
+        try {
+            send(email, REGISTER_EMAIL_TITLE, config.getAppURL() + REGISTER_LINK + registerToken);
+        } catch (MessagingException | MailAuthenticationException e) {
+            throw new ServerMailException(ResponseCode.EMAIL_ERROR.name());
+        }
     }
 }

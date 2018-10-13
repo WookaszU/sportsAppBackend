@@ -20,7 +20,7 @@ import java.util.Map;
 
 @Configuration
 @EnableWebSocketMessageBroker
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
