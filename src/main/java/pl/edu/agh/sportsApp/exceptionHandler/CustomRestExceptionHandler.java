@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ConfirmTokenException;
-import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ServerMailException;
-import pl.edu.agh.sportsApp.exceptionHandler.exceptions.UserAccountException;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceException;
@@ -21,7 +19,9 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
+                                                                  HttpHeaders headers,
+                                                                  HttpStatus status,
+                                                                  WebRequest request) {
         ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), ex.getBindingResult().toString());
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
@@ -66,6 +66,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleUserAccountException(UserAccountException ex) {
         ErrorDTO errorDTO = new ErrorDTO(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({PhotoProcessingException.class})
+    public ResponseEntity<Object> handleInvalidPhotoProportionsException(PhotoProcessingException ex) {
+        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
 
 }

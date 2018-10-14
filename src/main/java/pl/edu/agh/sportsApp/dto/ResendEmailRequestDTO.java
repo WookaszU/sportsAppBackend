@@ -1,17 +1,17 @@
 package pl.edu.agh.sportsApp.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Getter
-@Setter
-@RequiredArgsConstructor
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ResendEmailRequestDTO {
 
+    @Email
+    @NotNull
     String email;
 
 }

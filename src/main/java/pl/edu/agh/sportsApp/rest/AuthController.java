@@ -39,7 +39,7 @@ final class AuthController {
 
     @ApiOperation(value = "Resend a confirm email.")
     @PostMapping("/confirm/resend")
-    public void resendRegistrationEmail(@RequestBody final ResendEmailRequestDTO request) {
+    public void resendRegistrationEmail(@Valid @RequestBody final ResendEmailRequestDTO request) {
         authenticationService.resendRegistrationEmail(request);
     }
 
@@ -47,7 +47,6 @@ final class AuthController {
     @PostMapping("/login")
     public UserTokenState login(@Valid @RequestBody final LoginRequestDTO authenticationRequest) {
         return authenticationService.login(authenticationRequest);
-
     }
 
 }

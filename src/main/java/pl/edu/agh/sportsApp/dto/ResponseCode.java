@@ -20,5 +20,6 @@ public enum ResponseCode {
     FILE_TOO_BIG,
     MEDIA_SERVICE_INACCESIBLE,   // "Multimedia service is inaccessible now."
 
-    ACCESS_DENIED           // "Access denied to resource"
+    ACCESS_DENIED,           // "Access denied to resource."
+    RESOURCE_NOT_FOUND      // "Resource was not found on server."
 }
