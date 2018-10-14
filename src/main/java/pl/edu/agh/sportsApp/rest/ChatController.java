@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.controller;
+package pl.edu.agh.sportsApp.rest;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
@@ -10,17 +10,19 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.edu.agh.sportsApp.controller.dto.ChatMessageDTO;
 import pl.edu.agh.sportsApp.dateservice.DateService;
-import pl.edu.agh.sportsApp.model.Account;
+import pl.edu.agh.sportsApp.dto.ChatMessageDTO;
 import pl.edu.agh.sportsApp.model.ChatMessage;
+import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.service.ChatMessageStorage;
 import springfox.documentation.annotations.ApiIgnore;
+
+import javax.validation.Valid;
 
 
 @Controller
 @RequiredArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ChatController {
 
     @NonNull
@@ -30,13 +32,13 @@ public class ChatController {
 
     @MessageMapping("/chat/{chatId}")
     @SendTo("/topic/{chatId}")
-    public ChatMessageDTO postMessage(ChatMessageDTO msg,
+    public ChatMessageDTO postMessage(@Valid ChatMessageDTO msg,
                                       @DestinationVariable String chatId,
-                                      @ApiIgnore @AuthenticationPrincipal final Account account) {
+                                      @ApiIgnore @AuthenticationPrincipal final User user) {
 
         ChatMessage newMessage = ChatMessage.builder()
                 .senderId(msg.getSenderId())
-                .conversationId(Integer.parseInt(chatId))
+                .conversationId(Long.parseLong(chatId))
                 .content(msg.getContent())
                 .creationTime(dateService.now())
                 .build();
@@ -49,7 +51,7 @@ public class ChatController {
     }
 
     @RequestMapping("/public")
-    public String index(){
+    public String index() {
         return "index.html";
     }
 

@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import pl.edu.agh.sportsApp.Application;
-import pl.edu.agh.sportsApp.model.Account;
+import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.Event;
-import pl.edu.agh.sportsApp.service.AccountService;
+import pl.edu.agh.sportsApp.service.UserService;
 import pl.edu.agh.sportsApp.service.EventService;
 
 import java.util.Optional;
@@ -24,106 +24,110 @@ public class Tests2 {
     private EventService eventService;
 
     @Autowired
-    private AccountService accountService;
+    private UserService userService;
 
-    private final Account account = new Account("mail@gmail.com","firstName","lastName");
-    private final String accountEmail = "mail@gmail.com";
+    private final User user = User.builder()
+            .email("mail@gmail.com")
+            .firstName("firstName")
+            .lastName("lastName")
+            .build();
+    private final String userEmail = "mail@gmail.com";
 
     @Before
     public void setData() {
         assertNotNull(eventService);
-        assertNotNull(accountService);
-        assertEquals(0, account.getEvents().size());
-        assertEquals(false, accountService.getAccountByEmail(accountEmail).isPresent());
-        accountService.saveAccount(account);
-        assertEquals(true, accountService.getAccountByEmail(accountEmail).isPresent());
+        assertNotNull(userService);
+        assertEquals(0, user.getEvents().size());
+        assertEquals(false, userService.getUserByEmail(userEmail).isPresent());
+        userService.saveUser(user);
+        assertEquals(true, userService.getUserByEmail(userEmail).isPresent());
     }
 
     @Test
     public void saveUserTest() {
-        accountService.saveAccount(account);
-        assertEquals(true, accountService.getAccountByEmail(accountEmail).isPresent());
+        userService.saveUser(user);
+        assertEquals(true, userService.getUserByEmail(userEmail).isPresent());
     }
 
     @Test
     public void addNote() {
-        Optional<Account> accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        Account account = accountOptional.get();
-        assertEquals(0, account.getEvents().size());
+        Optional<User> userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        User user = userOptional.get();
+        assertEquals(0, user.getEvents().size());
         Event event = defaultEvent();
-        account.addEvent(event);
-        accountService.saveAccount(account);
-        accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        account = accountOptional.get();
-        assertEquals(1, account.getEvents().size());
+        userService.saveUser(user);
+        userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        user = userOptional.get();
+        assertEquals(1, user.getEvents().size());
     }
 
     @Test
     public void addManyNotesAndRemove() {
-        Optional<Account> accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        Account account = accountOptional.get();
-        assertEquals(0, account.getEvents().size());
+        Optional<User> userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        User user = userOptional.get();
+        assertEquals(0, user.getEvents().size());
         Event event = defaultEvent();
-        account.addEvent(event);
         event = defaultEvent();
-        account.addEvent(event);
-        accountService.saveAccount(account);
+        userService.saveUser(user);
 
-        accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        account = accountOptional.get();
-        assertEquals(2, account.getEvents().size());
-        event = account.getEvents().get(0);
-        account.getEvents().remove(event);
-        accountService.saveAccount(account);
+        userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        user = userOptional.get();
+        assertEquals(2, user.getEvents().size());
+        event = user.getEvents().iterator().next();
+        user.getEvents().remove(event);
+        userService.saveUser(user);
 
-        accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        account = accountOptional.get();
-        assertEquals(1, account.getEvents().size());
+        userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        user = userOptional.get();
+        assertEquals(1, user.getEvents().size());
     }
 
     @Test
     public void changeNoteContent() {
-        Optional<Account> accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        Account account = accountOptional.get();
-        assertEquals(0, account.getEvents().size());
+        Optional<User> userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        User user = userOptional.get();
+        assertEquals(0, user.getEvents().size());
         Event event = defaultEvent();
-        account.addEvent(event);
-        accountService.saveAccount(account);
+        userService.saveUser(user);
 
-        accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        account = accountOptional.get();
-        assertEquals(1, account.getEvents().size());
+        userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        user = userOptional.get();
+        assertEquals(1, user.getEvents().size());
 
-        event = account.getEvents().get(0);
+        event = user.getEvents().iterator().next();
         assertEquals("content", event.getContent());
         event.setContent("new");
-        eventService.saveEvent(event);
+//        eventService.saveEvent(event);
 
-        accountOptional = accountService.getAccountByEmail(accountEmail);
-        assertTrue(accountOptional.isPresent());
-        account = accountOptional.get();
-        assertEquals(1, account.getEvents().size());
+        userOptional = userService.getUserByEmail(userEmail);
+        assertTrue(userOptional.isPresent());
+        user = userOptional.get();
+        assertEquals(1, user.getEvents().size());
 
-        event = account.getEvents().get(0);
+        event = user.getEvents().iterator().next();
         assertEquals("new", event.getContent());
     }
 
     @After
     public void cleanup() {
-        account.getEvents().forEach(n -> {
+        user.getEvents().forEach(n -> {
             eventService.removeEvent(n);
         });
-        accountService.removeAccount(account.getId());
+        userService.removeUser(user.getId());
     }
 
     private Event defaultEvent() {
-        return new Event("title","0:0:0", "content");
+        return Event.builder()
+                .title("title")
+                .location("0:0:0")
+                .content("content")
+                .build();
     }
 }

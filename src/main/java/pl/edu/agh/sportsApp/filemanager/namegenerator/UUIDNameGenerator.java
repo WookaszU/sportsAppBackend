@@ -12,13 +12,13 @@ import java.util.UUID;
 @Primary
 @Component
 @RequiredArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UUIDNameGenerator implements NameGenerator {
 
     DateService dateService;
 
-    public String generate(){
-        return  dateService.now().toEpochSecond() + UUID.randomUUID().toString();
+    public String generate() {
+        return dateService.now().toEpochSecond() + UUID.randomUUID().toString();
     }
 
 }

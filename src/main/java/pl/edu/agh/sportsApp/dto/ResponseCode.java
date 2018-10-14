@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.controller.dto;
+package pl.edu.agh.sportsApp.dto;
 
 public enum ResponseCode {
 
@@ -12,12 +12,14 @@ public enum ResponseCode {
     EMPTY_FIELDS,           // "Fill all required fields in request form."
 
     CONFIRM_YOUR_ACCOUNT,   // "Confirm your new account."
-    ACCOUNT_NOT_EXISTS,      // "Account not exists."
+    USER_NOT_EXISTS,      // "User not exists."
     WRONG_LOGIN_OR_PASSWORD,  // "Wrong login or password."
 
     EMPTY_FILE,
     INVALID_IMAGE_PROPORTIONS,
     FILE_TOO_BIG,
-    MEDIA_SERVICE_INACCESIBLE   // "Multimedia service is inaccessible now."
+    MEDIA_SERVICE_INACCESIBLE,   // "Multimedia service is inaccessible now."
 
+    ACCESS_DENIED,           // "Access denied to resource."
+    RESOURCE_NOT_FOUND      // "Resource was not found on server."
 }

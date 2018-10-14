@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ChatMessageStorage {
 
     @NonNull
@@ -23,7 +23,7 @@ public class ChatMessageStorage {
     }
 
     // TODO CZY TUTAJ TO SORTOWAC???   niby jest pobierane dobrze w kolejnosci dodania do bazy chyba
-    public List<ChatMessage> getMessagesByConversationId(int conversationId){
+    public List<ChatMessage> getMessagesByConversationId(Long conversationId) {
         return chatMessageRepository.getByConversationIdOrderByCreationTime(conversationId);
     }
 

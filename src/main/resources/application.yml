@@ -1,5 +1,5 @@
 spring:
-    profiles: prod
+  profiles: prod
 login: ${ENV_EMAIL}
 password: ${ENV_EMAIL_PASS}
 replyTo: ${ENV_REPLY_TO}
@@ -10,7 +10,7 @@ mediaStorageURL: ${ENV_MEDIA_URL}
 ---
 
 spring:
-    profiles: dev
+  profiles: dev
 login:
 password:
 replyTo:

@@ -14,7 +14,7 @@ public class UserInspector implements UserRightsInspector {
         return true;
     }
 
-    public boolean hasUserMessagingRights(Principal principal, String messageDestination){
+    public boolean hasUserMessagingRights(Principal principal, String messageDestination) {
         // TODO
         return true;
     }

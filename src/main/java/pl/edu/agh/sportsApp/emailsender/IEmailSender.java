@@ -1,8 +1,6 @@
 package pl.edu.agh.sportsApp.emailsender;
 
 
-import pl.edu.agh.sportsApp.model.Account;
-
 import javax.mail.MessagingException;
 
 public interface IEmailSender {

@@ -3,10 +3,7 @@ package pl.edu.agh.sportsApp.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity(name = "photo")
@@ -15,8 +12,8 @@ public class Photo {
 
     @Column
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column
     private String photoId;
@@ -26,6 +23,13 @@ public class Photo {
 
     @Column
     private String lowResolutionPath;
+
+    @Column(name = "owner_id")
+    private Long ownerId;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    private User owner;
 
     public Photo(String photoId, String highResolutionPath, String lowResolutionPath) {
         this.photoId = photoId;

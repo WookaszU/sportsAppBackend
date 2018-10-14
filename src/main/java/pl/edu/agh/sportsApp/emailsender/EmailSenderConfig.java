@@ -13,7 +13,7 @@ import pl.edu.agh.sportsApp.config.YAMLConfig;
 import java.util.Properties;
 
 @Configuration
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EmailSenderConfig {
 
     @Autowired

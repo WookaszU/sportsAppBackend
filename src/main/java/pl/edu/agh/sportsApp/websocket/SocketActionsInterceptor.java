@@ -27,8 +27,7 @@ public class SocketActionsInterceptor implements ChannelInterceptor {
             if (!rightsInspector.hasUserSubscriptionRights(headerAccessor.getUser(), headerAccessor.getDestination())) {
                 return null;
             }
-        }
-        else if(StompCommand.SEND.equals(headerAccessor.getCommand())){
+        } else if (StompCommand.SEND.equals(headerAccessor.getCommand())) {
             if (!rightsInspector.hasUserMessagingRights(headerAccessor.getUser(), headerAccessor.getDestination())) {
                 return null;
             }

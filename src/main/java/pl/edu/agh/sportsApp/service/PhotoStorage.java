@@ -19,23 +19,23 @@ public class PhotoStorage {
         this.photoRepository = photoRepository;
     }
 
-    public Photo save(Photo photo){
+    public Photo save(Photo photo) {
         return photoRepository.save(photo);
     }
 
-    public void removeByPhotoId(String photoId){
-        photoRepository.removePhotoByPhotoId(photoId);
+    public void removeByPhotoId(String photoId) {
+        photoRepository.deleteById(Long.parseLong(photoId));
     }
 
-    public void removeById(int id){
-        photoRepository.removePhotoById(id);
+    public void removeById(Long id) {
+        photoRepository.deleteById(id);
     }
 
-    public Optional<Photo> findByPhotoId(String photoId){
+    public Optional<Photo> findByPhotoId(String photoId) {
         return photoRepository.findByPhotoId(photoId);
     }
 
-    public Optional<Photo> findById(int id){
+    public Optional<Photo> findById(Long id) {
         return photoRepository.findById(id);
     }
 

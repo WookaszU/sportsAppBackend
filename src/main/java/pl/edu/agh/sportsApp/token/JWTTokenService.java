@@ -90,7 +90,7 @@ final class JWTTokenService implements Clock, TokenService {
         try {
             final Claims claims = toClaims.get();
             final ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-            for (final Map.Entry<String, Object> e: claims.entrySet()) {
+            for (final Map.Entry<String, Object> e : claims.entrySet()) {
                 builder.put(e.getKey(), String.valueOf(e.getValue()));
             }
             return builder.build();

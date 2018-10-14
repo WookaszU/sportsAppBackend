@@ -1,44 +1,72 @@
 package pl.edu.agh.sportsApp.model;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import pl.edu.agh.sportsApp.dto.EventDTO;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@NoArgsConstructor
 @Entity(name = "event")
+@EqualsAndHashCode(exclude = {"id", "content", "ownerId", "owner", "participantIds", "participants"})
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Event {
 
-    @Column
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column
+    @NotNull
     private String title;
 
-    @Column
+    @NotNull
     private String location;
+
+    @NotNull
+    private LocalDateTime startDate;
 
     @Column(length = 5000)
     private String content;
 
-    // full Account? or id
-    @Column
-    private int ownerAccountId;
+    @Column(name = "owner_id")
+    private Long ownerId;
 
-//    @Column
-//    private LocalDateTime creationTimestamp;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    private User owner;
 
-    public Event(String title, String location, String content) {
-        this.location = location;
-        this.title = title;
-        this.content = content;
+    @Transient
+    private Set<Long> participantIds = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @Cascade(CascadeType.SAVE_UPDATE)
+    @JoinTable(
+            name = "UserEvents",
+            joinColumns = {@JoinColumn(name = "event_id")},
+            inverseJoinColumns = {@JoinColumn(name = "users_id")}
+    )
+    @Builder.Default
+    private Set<User> participants = new HashSet<>();
+
+    public EventDTO mapToDTO() {
+        return EventDTO.builder()
+                .id(this.getId())
+                .title(this.getTitle())
+                .location(this.getLocation())
+                .startDate(this.getStartDate())
+                .content(this.getContent())
+                .ownerId(this.getOwnerId())
+                .participantIds(this.getParticipants().stream()
+                        .map(User::getId)
+                        .collect(Collectors.toList()))
+                .build();
     }
-
 }

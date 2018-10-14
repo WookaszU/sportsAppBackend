@@ -4,17 +4,12 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailAuthenticationException;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.dateservice.DateService;
 import pl.edu.agh.sportsApp.emailsender.EmailSender;
 import pl.edu.agh.sportsApp.emailsender.tokengenerator.TokenGenerator;
-import pl.edu.agh.sportsApp.model.Account;
-import pl.edu.agh.sportsApp.model.token.Token;
-import pl.edu.agh.sportsApp.model.token.TokenType;
-
-import javax.mail.MessagingException;
+import pl.edu.agh.sportsApp.model.Token;
+import pl.edu.agh.sportsApp.model.User;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +17,7 @@ import javax.mail.MessagingException;
 public class RegisterService {
 
     @NonNull
-    AccountService accountService;
+    UserService userService;
     @NonNull
     TokenStorage tokenStorage;
     @NonNull
@@ -33,32 +28,43 @@ public class RegisterService {
     TokenGenerator tokenGenerator;
 
 
-    public void register(Account account) throws MessagingException, MailAuthenticationException {
-        String registerToken = tokenGenerator.generate(account);
-        account.setEnabled(false);
-        Account newAccount = accountService.saveAccount(account);
-        tokenStorage.saveToken(new Token(TokenType.REGISTER_CONFIRM, registerToken, newAccount, dateService.now()));
-        EmailSender.sendRegisterEmail(account.getEmail(), registerToken);
+    public void register(User user) {
+        String registerToken = tokenGenerator.generate(user);
+        user.setEnabled(false);
+        User newUser = userService.saveUser(user);
+        Token token = Token.builder()
+                .type(Token.TokenType.REGISTER_CONFIRM)
+                .value(registerToken)
+                .dateTime(dateService.now())
+                .owner(newUser)
+                .ownerId(newUser.getId())
+                .build();
+        tokenStorage.saveToken(token);
+        EmailSender.sendRegisterEmail(user.getEmail(), registerToken);
     }
 
-    public boolean confirm(Token confirmToken){
-        if(confirmToken.getDateTime().isBefore(dateService.now().minusDays(1)))
+    public boolean confirm(Token confirmToken) {
+        if (confirmToken.getDateTime().isBefore(dateService.now().minusDays(1)))
             return false;
-        Account confirmedAcc = confirmToken.getRelatedAccount();
+        User confirmedAcc = confirmToken.getOwner();
         confirmedAcc.setEnabled(true);
-        accountService.saveAccount(confirmedAcc);
+        userService.saveUser(confirmedAcc);
         tokenStorage.removeToken(confirmToken.getId());
         return true;
     }
 
-    public void resendEmail(Token prevToken) throws MessagingException {
-        String registerToken = tokenGenerator.generate(prevToken.getRelatedAccount());
+    public void resendEmail(Token prevToken) {
+        String registerToken = tokenGenerator.generate(prevToken.getOwner());
         tokenStorage.removeToken(prevToken.getId());
-        tokenStorage.saveToken(new Token(TokenType.REGISTER_CONFIRM,
-                registerToken,
-                prevToken.getRelatedAccount(),
-                dateService.now()));
-        EmailSender.sendRegisterEmail(prevToken.getRelatedAccount().getEmail(), registerToken);
+        Token newToken = Token.builder()
+                .type(Token.TokenType.REGISTER_CONFIRM)
+                .value(registerToken)
+                .dateTime(dateService.now())
+                .owner(prevToken.getOwner())
+                .ownerId(prevToken.getOwnerId())
+                .build();
+        tokenStorage.saveToken(newToken);
+        EmailSender.sendRegisterEmail(prevToken.getOwner().getEmail(), registerToken);
     }
 
 
