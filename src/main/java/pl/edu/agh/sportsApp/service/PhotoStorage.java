@@ -32,7 +32,7 @@ public class PhotoStorage {
     }
 
     public Optional<Photo> findByPhotoId(String photoId) {
-        return photoRepository.findById(Long.parseLong(photoId));
+        return photoRepository.findByPhotoId(photoId);
     }
 
     public Optional<Photo> findById(Long id) {
