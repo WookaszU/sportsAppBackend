@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -22,56 +23,62 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatus status,
                                                                   WebRequest request) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), ex.getBindingResult().toString());
+        ErrorDTO errorDTO = new ErrorDTO(ResponseCode.METHOD_ARGS_NOT_VALID.name());
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({PersistenceException.class})
     public ResponseEntity<Object> handleAlreadyExists(PersistenceException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.CONFLICT.value(), ex.getCause().getMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getCause().getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.NOT_FOUND.value(), ex.getLocalizedMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getLocalizedMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), ex.getLocalizedMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getLocalizedMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({AccessDeniedException.class})
     public ResponseEntity<Object> handleAuthenticationArgument(AccessDeniedException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.FORBIDDEN.value(), ex.getMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({ServerMailException.class})
     public ResponseEntity<Object> handleServerMailException(ServerMailException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler({ConfirmTokenException.class})
     public ResponseEntity<Object> handleConfirmTokenException(ConfirmTokenException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({UserAccountException.class})
     public ResponseEntity<Object> handleUserAccountException(UserAccountException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({PhotoProcessingException.class})
     public ResponseEntity<Object> handleInvalidPhotoProportionsException(PhotoProcessingException ex) {
-        ErrorDTO errorDTO = new ErrorDTO(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({RegisterException.class})
+    public ResponseEntity<Object> handleInvalidPhotoProportionsException(RegisterException ex) {
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.CONFLICT);
     }
 
 }

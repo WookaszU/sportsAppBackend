@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ErrorDTO {
-    private int errorCode;
+class ErrorDTO {
+
     private String errorMessage;
+
 }

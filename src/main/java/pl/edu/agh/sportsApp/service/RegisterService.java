@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.dateservice.DateService;
+import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.emailsender.EmailSender;
 import pl.edu.agh.sportsApp.emailsender.tokengenerator.TokenGenerator;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.RegisterException;
 import pl.edu.agh.sportsApp.model.Token;
 import pl.edu.agh.sportsApp.model.User;
 
@@ -29,6 +31,8 @@ public class RegisterService {
 
 
     public void register(User user) {
+        if(userService.getUserByEmail(user.getEmail()).isPresent())
+            throw new RegisterException(ResponseCode.ALREADY_REGISTERED.name());
         String registerToken = tokenGenerator.generate(user);
         user.setEnabled(false);
         User newUser = userService.saveUser(user);
