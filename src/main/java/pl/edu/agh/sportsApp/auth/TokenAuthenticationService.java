@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.dto.*;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.AuthRefusedException;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ConfirmTokenException;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.UserAccountException;
 import pl.edu.agh.sportsApp.model.Token;
@@ -18,7 +19,6 @@ import pl.edu.agh.sportsApp.token.TokenService;
 import pl.edu.agh.sportsApp.useractivity.UserActivityData;
 import pl.edu.agh.sportsApp.useractivity.UserActivityManager;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
@@ -79,7 +79,7 @@ final class TokenAuthenticationService implements AuthenticationService {
 
         Optional<User> userOpt = userService.getUserByEmail(requestDTO.getEmail());
         if (!userOpt.isPresent())
-            throw new EntityNotFoundException(ResponseCode.WRONG_LOGIN_OR_PASSWORD.name());
+            throw new AuthRefusedException(ResponseCode.WRONG_LOGIN_OR_PASSWORD.name());
 
         User user = userOpt.get();
 
@@ -91,7 +91,7 @@ final class TokenAuthenticationService implements AuthenticationService {
             userActivityManager.addActiveUser(requestDTO.getEmail(), user, token);
             return new UserTokenState(token);
         } else {
-            throw new EntityNotFoundException(ResponseCode.WRONG_LOGIN_OR_PASSWORD.name());
+            throw new AuthRefusedException(ResponseCode.WRONG_LOGIN_OR_PASSWORD.name());
         }
     }
 
