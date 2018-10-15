@@ -20,6 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.validation.Valid;
 
 
+@ApiIgnore
 @Controller
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)

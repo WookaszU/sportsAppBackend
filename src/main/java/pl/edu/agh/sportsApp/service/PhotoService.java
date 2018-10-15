@@ -34,7 +34,7 @@ public class PhotoService {
         try {
             photo = photoManager.savePhoto(file);
         } catch (IOException e) {
-            throw new PhotoProcessingException(ResponseCode.MEDIA_SERVICE_INACCESIBLE.name());
+            throw new PhotoProcessingException(ResponseCode.MEDIA_SERVICE_NOT_AVAILABLE.name());
         }
 
         user.setUserPhoto(photo);

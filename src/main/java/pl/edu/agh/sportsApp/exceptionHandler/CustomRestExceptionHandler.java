@@ -76,9 +76,21 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({RegisterException.class})
-    public ResponseEntity<Object> handleInvalidPhotoProportionsException(RegisterException ex) {
+    public ResponseEntity<Object> handleRegisterException(RegisterException ex) {
         ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({AuthRefusedException.class})
+    public ResponseEntity<Object> handleAuthRefusedException(AuthRefusedException ex) {
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler({MediaInaccesibleException.class})
+    public ResponseEntity<Object> handleAuthRefusedException(MediaInaccesibleException ex) {
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
