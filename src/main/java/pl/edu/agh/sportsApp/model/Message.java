@@ -11,12 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.ZonedDateTime;
 
-@Entity(name = "chat_message")
+@Entity(name = "message")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatMessage {
+public class Message {
 
     @Column
     @Id
