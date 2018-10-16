@@ -41,10 +41,7 @@ public class EventService {
         participantIds.add(owner.getId());
         newEvent.setParticipantIds(participantIds);
         newEvent.setEventChat(eventChat);
-        Event e = eventRepository.save(newEvent);
-
-        EventChat d = e.getEventChat();
-        int x = 5;
+        eventRepository.save(newEvent);
     }
 
     public void addParticipant(Long eventId, Long participantId) {
