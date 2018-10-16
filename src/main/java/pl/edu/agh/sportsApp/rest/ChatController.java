@@ -10,11 +10,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.edu.agh.sportsApp.dateservice.DateService;
 import pl.edu.agh.sportsApp.dto.ChatMessageDTO;
-import pl.edu.agh.sportsApp.model.ChatMessage;
 import pl.edu.agh.sportsApp.model.User;
-import pl.edu.agh.sportsApp.service.ChatMessageStorage;
+import pl.edu.agh.sportsApp.service.ChatService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
@@ -27,27 +25,14 @@ import javax.validation.Valid;
 public class ChatController {
 
     @NonNull
-    DateService dateService;
-    @NonNull
-    ChatMessageStorage messageStorage;
+    ChatService chatService;
 
     @MessageMapping("/chat/{chatId}")
     @SendTo("/topic/{chatId}")
-    public ChatMessageDTO postMessage(@Valid ChatMessageDTO msg,
-                                      @DestinationVariable String chatId,
+    public ChatMessageDTO postMessage(@Valid final ChatMessageDTO msg,
+                                      @DestinationVariable final String chatId,
                                       @ApiIgnore @AuthenticationPrincipal final User user) {
-
-        ChatMessage newMessage = ChatMessage.builder()
-                .senderId(msg.getSenderId())
-                .conversationId(Long.parseLong(chatId))
-                .content(msg.getContent())
-                .creationTime(dateService.now())
-                .build();
-
-        messageStorage.save(newMessage);
-
-//        List<ChatMessage> x = messageStorage.getMessagesByConversationId(Integer.parseInt(chatId));
-
+        chatService.handleMessageAsyncTasks(msg, chatId, user);
         return msg;
     }
 

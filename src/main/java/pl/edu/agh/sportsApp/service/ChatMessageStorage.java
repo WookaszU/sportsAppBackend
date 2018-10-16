@@ -5,8 +5,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.sportsApp.model.ChatMessage;
-import pl.edu.agh.sportsApp.repository.ChatMessageRepository;
+import pl.edu.agh.sportsApp.model.Message;
+import pl.edu.agh.sportsApp.repository.MessageRepository;
 
 import java.util.List;
 
@@ -16,15 +16,15 @@ import java.util.List;
 public class ChatMessageStorage {
 
     @NonNull
-    ChatMessageRepository chatMessageRepository;
+    MessageRepository messageRepository;
 
-    public ChatMessage save(ChatMessage chatMessage) {
-        return chatMessageRepository.save(chatMessage);
+    public Message save(Message message) {
+        return messageRepository.save(message);
     }
 
     // TODO CZY TUTAJ TO SORTOWAC???   niby jest pobierane dobrze w kolejnosci dodania do bazy chyba
-    public List<ChatMessage> getMessagesByConversationId(Long conversationId) {
-        return chatMessageRepository.getByConversationIdOrderByCreationTime(conversationId);
+    public List<Message> getMessagesByConversationId(Long conversationId) {
+        return messageRepository.getByConversationIdOrderByCreationTime(conversationId);
     }
 
 }

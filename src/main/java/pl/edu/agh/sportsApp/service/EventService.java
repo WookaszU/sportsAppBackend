@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.EventDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.model.Event;
+import pl.edu.agh.sportsApp.model.EventChat;
+import pl.edu.agh.sportsApp.model.PrivateChat;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.repository.EventRepository;
 import pl.edu.agh.sportsApp.repository.UserRepository;
@@ -18,14 +20,17 @@ import java.util.Set;
 public class EventService {
     private EventRepository eventRepository;
     private UserRepository userRepository;
+    private ChatStorage chatStorage;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository, ChatStorage chatStorage) {
         this.eventRepository = eventRepository;
         this.userRepository = userRepository;
+        this.chatStorage = chatStorage;
     }
 
-    public void saveEvent(EventDTO eventDTO, User owner) {
+    public void createEvent(EventDTO eventDTO, User owner) {
+        EventChat eventChat = chatStorage.createEventChat();
         Event newEvent = eventDTO.parseEvent();
         newEvent.setOwnerId(owner.getId());
         newEvent.setOwner(owner);
@@ -35,7 +40,11 @@ public class EventService {
         Set<Long> participantIds = new HashSet<>();
         participantIds.add(owner.getId());
         newEvent.setParticipantIds(participantIds);
-        eventRepository.save(newEvent);
+        newEvent.setEventChat(eventChat);
+        Event e = eventRepository.save(newEvent);
+
+        EventChat d = e.getEventChat();
+        int x = 5;
     }
 
     public void addParticipant(Long eventId, Long participantId) {

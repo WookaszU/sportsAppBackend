@@ -28,7 +28,7 @@ public class Photo {
     private Long ownerId;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_id", insertable = false, updatable = false)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     private User owner;
 
     public Photo(String photoId, String highResolutionPath, String lowResolutionPath) {

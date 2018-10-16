@@ -38,7 +38,7 @@ public class EventController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createEvent(@Valid @RequestBody EventDTO eventDTO,
                             @ApiIgnore @AuthenticationPrincipal final User user) {
-        eventService.saveEvent(eventDTO, user);
+        eventService.createEvent(eventDTO, user);
     }
 
     @ApiOperation(value = "Join event with given id.")

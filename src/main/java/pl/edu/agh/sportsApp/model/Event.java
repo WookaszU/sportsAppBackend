@@ -56,6 +56,10 @@ public class Event {
     @Builder.Default
     private Set<User> participants = new HashSet<>();
 
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name= "chat_id", referencedColumnName = "id", nullable = false)
+    private EventChat eventChat;
+
     public EventDTO mapToDTO() {
         return EventDTO.builder()
                 .id(this.getId())
