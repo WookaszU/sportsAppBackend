@@ -50,7 +50,7 @@ public class PhotoController {
     @ApiOperation(value = "Upload profile photo." , response = UploadResponseDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Photo uploaded."),
-            @ApiResponse(code = 400, message = "ResponseCodes = {EMPTY_FILE, INVALID_IMAGE_PROPORTIONS, FILE_TOO_BIG}"),
+            @ApiResponse(code = 400, message = "ResponseCodes = {EMPTY_FILE, WRONG_FORMAT, INVALID_IMAGE_PROPORTIONS, FILE_TOO_BIG}"),
             @ApiResponse(code = 401, message = "Log first to gain access."),
             @ApiResponse(code = 500, message = "ResponseCodes = {MEDIA_SERVICE_NOT_AVAILABLE}")
     })
@@ -88,7 +88,7 @@ public class PhotoController {
     @ApiOperation(value = "Upload event photo." , response = UploadResponseDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Photo uploaded."),
-            @ApiResponse(code = 400, message = "ResponseCodes = {EMPTY_FILE, INVALID_IMAGE_PROPORTIONS, FILE_TOO_BIG}"),
+            @ApiResponse(code = 400, message = "ResponseCodes = {EMPTY_FILE, WRONG_FORMAT, INVALID_IMAGE_PROPORTIONS, FILE_TOO_BIG}"),
             @ApiResponse(code = 401, message = "Log first to gain access."),
             @ApiResponse(code = 500, message = "ResponseCodes = {MEDIA_SERVICE_NOT_AVAILABLE}")
     })

@@ -22,6 +22,7 @@ public enum ResponseCode {
     EMPTY_FILE,
     INVALID_IMAGE_PROPORTIONS,
     FILE_TOO_BIG,
+    WRONG_FORMAT,                   // "Wrong file format."
     MEDIA_SERVICE_NOT_AVAILABLE,    // "Multimedia service is inaccessible now."
     RESOURCE_NOT_FOUND,             // "Resource was not found on server."
 

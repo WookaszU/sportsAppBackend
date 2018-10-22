@@ -13,7 +13,6 @@ import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.PhotoProcessingException;
 import pl.edu.agh.sportsApp.filemanager.namegenerator.NameGenerator;
 import pl.edu.agh.sportsApp.filemanager.photoeditor.PhotoEditor;
-import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.model.photo.Photo;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
@@ -73,13 +72,14 @@ public class PhotoManager {
         BufferedImage lowerResolutionImg = photoEditor.resize(bufferedImage);
 
         String fileId = nameGenerator.generate();
+        String photoFormat = file.getOriginalFilename().split("\\.")[1];
 
-        String highFilePath = uploadsDir + HIGH_QUALITY + fileId + "." + file.getOriginalFilename().split("\\.")[1];
-        String lowFilePath = uploadsDir + LOW_QUALITY + fileId + "." + file.getOriginalFilename().split("\\.")[1];
+        String highFilePath = uploadsDir + HIGH_QUALITY + fileId + "." + photoFormat;
+        String lowFilePath = uploadsDir + LOW_QUALITY + fileId + "." + photoFormat;
         File highDest = new File(highFilePath);
         File lowDest = new File(lowFilePath);
 
-        ImageIO.write(lowerResolutionImg, "jpg", lowDest);
+        ImageIO.write(lowerResolutionImg, photoFormat, lowDest);
         file.transferTo(highDest);
 
         return new PhotoPaths(fileId, highFilePath, lowFilePath);
@@ -101,26 +101,10 @@ public class PhotoManager {
                 photoPaths.getLowFilePath());
     }
 
-//    public Optional<Photo> removePhoto(String photoId) {
-//        Optional<Photo> photoOpt = photoStorage.findByPhotoId(photoId);
-//        if (!photoOpt.isPresent())
-//            return Optional.empty();
-//
-//        return removePhoto(photoOpt.get());
-//    }
-
     public boolean removePhotoFromServerStorage(Photo photoToRemove) {
         return (new File(photoToRemove.getLowResolutionPath()).delete())
                 && (new File(photoToRemove.getHighResolutionPath()).delete());
     }
-
-//    public Optional<Photo> removePhoto(Photo photoToRemove) {
-//        if(!removePhotoFromServerStorage(photoToRemove))
-//            return Optional.empty();
-//
-//        photoStorage.removeById(photoToRemove.getId());
-//        return Optional.of(photoToRemove);
-//    }
 
     @Data
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
