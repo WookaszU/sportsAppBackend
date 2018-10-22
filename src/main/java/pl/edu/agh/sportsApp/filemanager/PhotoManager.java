@@ -1,6 +1,7 @@
 package pl.edu.agh.sportsApp.filemanager;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.PathResource;
@@ -12,7 +13,10 @@ import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.PhotoProcessingException;
 import pl.edu.agh.sportsApp.filemanager.namegenerator.NameGenerator;
 import pl.edu.agh.sportsApp.filemanager.photoeditor.PhotoEditor;
-import pl.edu.agh.sportsApp.model.Photo;
+import pl.edu.agh.sportsApp.model.Event;
+import pl.edu.agh.sportsApp.model.photo.EventPhoto;
+import pl.edu.agh.sportsApp.model.photo.Photo;
+import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 import pl.edu.agh.sportsApp.service.PhotoStorage;
 
 import javax.imageio.ImageIO;
@@ -60,8 +64,7 @@ public class PhotoManager {
         return Optional.of(new PathResource(photoOpt.get().getHighResolutionPath()));
     }
 
-    public Photo savePhoto(MultipartFile file) throws IOException {
-
+    private PhotoPaths savePhotoToServerStorage(MultipartFile file) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
 
         if (bufferedImage.getWidth() != bufferedImage.getHeight())
@@ -79,24 +82,51 @@ public class PhotoManager {
         ImageIO.write(lowerResolutionImg, "jpg", lowDest);
         file.transferTo(highDest);
 
-        return photoStorage.save(new Photo(fileId, highFilePath, lowFilePath));
+        return new PhotoPaths(fileId, highFilePath, lowFilePath);
     }
 
-    public Optional<Photo> removePhoto(String photoId) {
-        Optional<Photo> photoOpt = photoStorage.findByPhotoId(photoId);
-        if (!photoOpt.isPresent())
-            return Optional.empty();
-
-        return removePhoto(photoOpt.get());
+    public ProfilePhoto saveProfilePhoto(MultipartFile file) throws IOException {
+        PhotoPaths photoPaths = savePhotoToServerStorage(file);
+        return new ProfilePhoto(
+                photoPaths.getFileId(),
+                photoPaths.getHighFilePath(),
+                photoPaths.getLowFilePath());
     }
 
-    public Optional<Photo> removePhoto(Photo photoToRemove) {
-        if (!((new File(photoToRemove.getLowResolutionPath()).delete())
-                && (new File(photoToRemove.getHighResolutionPath()).delete())))
-            return Optional.empty();
-
-        photoStorage.removeById(photoToRemove.getId());
-        return Optional.of(photoToRemove);
+    public EventPhoto createEventPhoto(MultipartFile file) throws IOException {
+        PhotoPaths photoPaths = savePhotoToServerStorage(file);
+        return new EventPhoto(
+                photoPaths.getFileId(),
+                photoPaths.getHighFilePath(),
+                photoPaths.getLowFilePath());
     }
 
+//    public Optional<Photo> removePhoto(String photoId) {
+//        Optional<Photo> photoOpt = photoStorage.findByPhotoId(photoId);
+//        if (!photoOpt.isPresent())
+//            return Optional.empty();
+//
+//        return removePhoto(photoOpt.get());
+//    }
+
+    public boolean removePhotoFromServerStorage(Photo photoToRemove) {
+        return (new File(photoToRemove.getLowResolutionPath()).delete())
+                && (new File(photoToRemove.getHighResolutionPath()).delete());
+    }
+
+//    public Optional<Photo> removePhoto(Photo photoToRemove) {
+//        if(!removePhotoFromServerStorage(photoToRemove))
+//            return Optional.empty();
+//
+//        photoStorage.removeById(photoToRemove.getId());
+//        return Optional.of(photoToRemove);
+//    }
+
+    @Data
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    private class PhotoPaths {
+        String fileId;
+        String highFilePath;
+        String lowFilePath;
+    }
 }

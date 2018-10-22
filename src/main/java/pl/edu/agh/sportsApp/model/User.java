@@ -7,6 +7,8 @@ import org.hibernate.annotations.CascadeType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.edu.agh.sportsApp.dto.UserDTO;
+import pl.edu.agh.sportsApp.model.photo.Photo;
+import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -17,12 +19,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @Entity
 @Table(name = "Users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"id", "userPhoto", "tokenIds", "tokens", "eventIds", "events"})
-@Data
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,9 +50,10 @@ public class User implements UserDetails {
     @NotNull
     private String lastName;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @Cascade(CascadeType.SAVE_UPDATE)
-    private Photo userPhoto;
+    @Setter(AccessLevel.PRIVATE)
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = javax.persistence.CascadeType.ALL ,
+            orphanRemoval = true)
+    private ProfilePhoto userPhoto;
 
     @Transient
     private Set<Long> tokenIds = new HashSet<>();
@@ -74,6 +76,15 @@ public class User implements UserDetails {
     @Builder.Default
     private Set<Event> events = new HashSet<>();
 
+    public void setPhoto(ProfilePhoto photo){
+        photo.setUser(this);
+        this.setUserPhoto(photo);
+    }
+
+    public void deletePhoto(){
+        this.setUserPhoto(null);
+    }
+
     public UserDTO mapToDTO() {
         UserDTO userDTO = UserDTO.builder()
                 .id(this.getId())
@@ -86,7 +97,7 @@ public class User implements UserDetails {
                 .build();
         Photo photo = this.getUserPhoto();
         if (photo != null) {
-            userDTO.setPhotoId(photo.getId());
+            userDTO.setPhotoId(photo.getPhotoId());
         }
         return userDTO;
     }

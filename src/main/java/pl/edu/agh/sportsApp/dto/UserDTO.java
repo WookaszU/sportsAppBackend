@@ -32,7 +32,7 @@ public class UserDTO {
     private String lastName;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Long photoId;
+    private String photoId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<Long> eventOwnedIds = new ArrayList<>();

@@ -1,12 +1,14 @@
-package pl.edu.agh.sportsApp.model;
+package pl.edu.agh.sportsApp.model.photo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pl.edu.agh.sportsApp.model.User;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @Entity(name = "photo")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Data
 public class Photo {
 
@@ -24,16 +26,10 @@ public class Photo {
     @Column
     private String lowResolutionPath;
 
-    @Column(name = "owner_id")
-    private Long ownerId;
-
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    private User owner;
-
     public Photo(String photoId, String highResolutionPath, String lowResolutionPath) {
         this.photoId = photoId;
         this.highResolutionPath = highResolutionPath;
         this.lowResolutionPath = lowResolutionPath;
     }
+
 }

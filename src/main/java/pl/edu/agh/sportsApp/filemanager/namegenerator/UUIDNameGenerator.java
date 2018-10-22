@@ -15,10 +15,8 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UUIDNameGenerator implements NameGenerator {
 
-    DateService dateService;
-
     public String generate() {
-        return dateService.now().toEpochSecond() + UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
 
 }
