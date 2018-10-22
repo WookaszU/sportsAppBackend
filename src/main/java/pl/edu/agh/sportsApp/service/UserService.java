@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 import pl.edu.agh.sportsApp.repository.UserRepository;
 
 import java.util.Optional;
@@ -39,10 +40,21 @@ public class UserService {
         return Optional.ofNullable(userRepository.findByEmail(email));
     }
 
+    public void setUserAvatar(User user, ProfilePhoto profilePhoto){
+        user.setPhoto(profilePhoto);
+        userRepository.save(user);
+    }
+
+    public void removeUserAvatar(User user) {
+        user.deletePhoto();
+        userRepository.save(user);
+    }
+
     public void updateUser(UserModifyDTO userDTO, User user) {
         if (userDTO.getFirstName() != null) user.setFirstName(userDTO.getFirstName());
         if (userDTO.getLastName() != null) user.setLastName(userDTO.getLastName());
         if (userDTO.getPassword() != null) user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
     }
+
 }

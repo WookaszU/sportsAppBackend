@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.model;
+package pl.edu.agh.sportsApp.model.chat;
 
 import lombok.Data;
 

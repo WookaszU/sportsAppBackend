@@ -1,34 +1,30 @@
-package pl.edu.agh.sportsApp.model;
+package pl.edu.agh.sportsApp.model.chat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
+import pl.edu.agh.sportsApp.model.User;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "chat")
-public class Chat {
+@Entity(name = "privateChat")
+public class PrivateChat extends Chat {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
-            name = "ChatMessages",
+            name = "UserChats",
             joinColumns = {@JoinColumn(name = "chat_id")},
-            inverseJoinColumns = {@JoinColumn(name = "message_id")}
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     @Builder.Default
-    private Set<Message> messages = new HashSet<>();
+    private Set<User> participants = new HashSet<>();
 
 }

@@ -7,13 +7,14 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.EventDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.model.Event;
-import pl.edu.agh.sportsApp.model.EventChat;
-import pl.edu.agh.sportsApp.model.PrivateChat;
+import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.repository.EventRepository;
 import pl.edu.agh.sportsApp.repository.UserRepository;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -81,4 +82,19 @@ public class EventService {
         else
             eventRepository.deleteById(eventID);
     }
+
+    public Optional<Event> findEventById(Long id){
+        return eventRepository.findById(id);
+    }
+
+    public void addEventPhoto(Event event, EventPhoto eventPhoto) {
+        event.addEventPhoto(eventPhoto);
+        eventRepository.save(event);
+    }
+
+    public void removeEventPhoto(Event event, EventPhoto eventPhoto) {
+        event.removeEventPhoto(eventPhoto);
+        eventRepository.save(event);
+    }
+
 }
