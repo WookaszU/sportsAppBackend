@@ -9,11 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.dto.EventDTO;
+import pl.edu.agh.sportsApp.dto.EventRequestDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.service.EventService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -29,16 +32,16 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @ApiOperation(value = "Create new event.")
+    @ApiOperation(value = "Create new event (date format: \"YYYY-MM-DDTHH-mm-ss\"")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Event created."),
             @ApiResponse(code = 401, message = "Log first to gain access.")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createEvent(@Valid @RequestBody EventDTO eventDTO,
+    public void createEvent(@Valid @RequestBody EventRequestDTO eventRequestDTO,
                             @ApiIgnore @AuthenticationPrincipal final User user) {
-        eventService.createEvent(eventDTO, user);
+        eventService.createEvent(eventRequestDTO, user);
     }
 
     @ApiOperation(value = "Join event with given id.")
@@ -92,5 +95,15 @@ public class EventController {
     public void deleteEvent(@PathVariable("id") Long eventID,
                             @ApiIgnore @AuthenticationPrincipal final User user) {
         eventService.deleteEvent(eventID, user.getId());
+    }
+
+    @ApiOperation(value = "Get all events (only for testing)")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Events returned."),
+            @ApiResponse(code = 401, message = "Log first to gain access.")
+    })
+    @GetMapping
+    public List<EventDTO> getAllEvents(){
+        return eventService.getAllEvents();
     }
 }

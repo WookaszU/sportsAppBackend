@@ -3,6 +3,8 @@ package pl.edu.agh.sportsApp.model;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.search.annotations.Latitude;
+import org.hibernate.search.annotations.Longitude;
 import pl.edu.agh.sportsApp.dto.EventDTO;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
@@ -30,7 +32,12 @@ public class Event {
     private String title;
 
     @NotNull
-    private String location;
+    @Latitude
+    private Double latitude;
+
+    @NotNull
+    @Longitude
+    private Double longitude;
 
     @NotNull
     private LocalDateTime startDate;
@@ -80,7 +87,8 @@ public class Event {
         return EventDTO.builder()
                 .id(this.getId())
                 .title(this.getTitle())
-                .location(this.getLocation())
+                .latitude(this.getLatitude())
+                .longitude(this.getLongitude())
                 .startDate(this.getStartDate())
                 .content(this.getContent())
                 .ownerId(this.getOwnerId())

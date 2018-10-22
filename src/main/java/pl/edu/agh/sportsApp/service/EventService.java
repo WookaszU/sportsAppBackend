@@ -5,6 +5,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.EventDTO;
+import pl.edu.agh.sportsApp.dto.EventRequestDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
@@ -14,8 +15,10 @@ import pl.edu.agh.sportsApp.repository.EventRepository;
 import pl.edu.agh.sportsApp.repository.UserRepository;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -30,9 +33,9 @@ public class EventService {
         this.chatStorage = chatStorage;
     }
 
-    public void createEvent(EventDTO eventDTO, User owner) {
+    public void createEvent(EventRequestDTO eventRequestDTO, User owner) {
         EventChat eventChat = chatStorage.createEventChat();
-        Event newEvent = eventDTO.parseEvent();
+        Event newEvent = eventRequestDTO.parseEvent();
         newEvent.setOwnerId(owner.getId());
         newEvent.setOwner(owner);
         Set<User> participants = new HashSet<>();
@@ -97,4 +100,9 @@ public class EventService {
         eventRepository.save(event);
     }
 
+    public List<EventDTO> getAllEvents() {
+        return eventRepository.findAll().stream()
+                .map(Event::mapToDTO)
+                .collect(Collectors.toList());
+    }
 }

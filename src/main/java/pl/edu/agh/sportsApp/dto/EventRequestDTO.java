@@ -10,15 +10,12 @@ import pl.edu.agh.sportsApp.model.Event;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDTO {
-    private Long id;
-
+public class EventRequestDTO {
     @NotNull
     private String title;
 
@@ -35,7 +32,13 @@ public class EventDTO {
 
     private String content;
 
-    private Long ownerId;
-    private List<Long> participantIds;
+    public Event parseEvent() {
+        return Event.builder()
+                .title(this.getTitle())
+                .startDate(this.getStartDate())
+                .latitude(this.getLatitude())
+                .longitude(this.getLongitude())
+                .content(this.getContent())
+                .build();
+    }
 }
-
