@@ -30,7 +30,8 @@ final class UserController {
     @NonNull
     private final UserService userService;
 
-    @ApiOperation(value = "Get current user info.", response = UserDTO.class)
+    @ApiOperation(value = "Get current user info.",
+            notes = "Returns information about current user e.g. user photoId. ", response = UserDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "User data returned."),
             @ApiResponse(code = 401, message = "Log first to gain access."),

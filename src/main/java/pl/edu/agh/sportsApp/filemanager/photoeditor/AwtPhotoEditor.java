@@ -13,8 +13,8 @@ import java.awt.image.BufferedImage;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AwtPhotoEditor implements PhotoEditor {
 
-    int IMG_WIDTH = 150;
-    int IMG_HEIGHT = 150;
+    int IMG_WIDTH = 250;
+    int IMG_HEIGHT = 250;
 
     public BufferedImage resize(BufferedImage originalImage) {
 

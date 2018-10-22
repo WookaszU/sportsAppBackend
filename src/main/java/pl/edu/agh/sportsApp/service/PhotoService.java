@@ -106,6 +106,9 @@ public class PhotoService {
         if (file.getSize() > maxProfilePhotoSize)
             throw new PhotoProcessingException(ResponseCode.FILE_TOO_BIG.name());
 
+        if(file.getContentType() == null || !file.getContentType().matches("image/(.*)"))
+            throw new PhotoProcessingException(ResponseCode.WRONG_FORMAT.name());
+
         setProfilePhoto(user, file);
     }
 
@@ -130,6 +133,9 @@ public class PhotoService {
     public void handleEventPhotoUpload(MultipartFile file, String eventId) {
         if (file == null || file.isEmpty())
             throw new PhotoProcessingException(ResponseCode.EMPTY_FILE.name());
+
+        if(file.getContentType() == null || !file.getContentType().matches("image/(.*)"))
+            throw new PhotoProcessingException(ResponseCode.WRONG_FORMAT.name());
 
         Optional<Event> eventOpt = eventService.findEventById(Long.parseLong(eventId));
 
