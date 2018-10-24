@@ -1,5 +1,6 @@
-package pl.edu.agh.sportsApp.useractivity;
+package pl.edu.agh.sportsApp.useractivity.manager;
 
+import lombok.Getter;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.model.User;
 
@@ -12,6 +13,7 @@ import static java.util.Optional.ofNullable;
 @Service
 public class UserActivityManager {
 
+    @Getter
     private final Map<String, UserActivityData> activeUsers = new HashMap<>();
 
     public void addActiveUser(String userName, User user, String token) {

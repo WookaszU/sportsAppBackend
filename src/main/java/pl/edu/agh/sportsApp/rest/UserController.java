@@ -8,6 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
 import pl.edu.agh.sportsApp.dto.UserDTO;
+import pl.edu.agh.sportsApp.dto.UserEventsListDTO;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.service.UserService;
@@ -26,9 +27,9 @@ import static lombok.AccessLevel.PRIVATE;
 final class UserController {
 
     @NonNull
-    private final AuthenticationService authenticationService;
+    AuthenticationService authenticationService;
     @NonNull
-    private final UserService userService;
+    UserService userService;
 
     @ApiOperation(value = "Get current user info.",
             notes = "Returns information about current user e.g. user photoId. ", response = UserDTO.class)
@@ -38,7 +39,7 @@ final class UserController {
     })
     @GetMapping("/current")
     public UserDTO getCurrent(@ApiIgnore @AuthenticationPrincipal final User user) {
-        return user.mapToDTO();
+        return userService.getUserById(user.getId()).mapToDTO();
     }
 
     @ApiOperation(value = "Logout from application.", response = Boolean.class)
@@ -83,4 +84,27 @@ final class UserController {
     public UserDTO getUserById(@PathVariable("id") Long userId) {
         return userService.getUserById(userId).mapToDTO();
     }
+
+    @ApiOperation(value = "Get current user active events.", response = UserEventsListDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Events list returned."),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+    })
+    @GetMapping("/myEventsList")
+    public UserEventsListDTO getUserActiveEvents(@ApiIgnore @AuthenticationPrincipal final User user) {
+        return userService.getUserActiveEvents(user);
+    }
+
+    @ApiOperation(value = "Get given user historic events.",
+            notes = "If not existing userId was given, the result will be an empty list.",
+            response = UserEventsListDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Events list returned."),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+    })
+    @GetMapping("/userHistory/{userId}")
+    public UserEventsListDTO getUserHistoricEvents(@PathVariable Long userId) {
+        return userService.getUserHistoricEvents(userId);
+    }
+
 }

@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.useractivity;
+package pl.edu.agh.sportsApp.useractivity.manager;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

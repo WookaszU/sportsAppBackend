@@ -4,6 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.edu.agh.sportsApp.dto.UserDTO;
@@ -66,7 +67,8 @@ public class User implements UserDetails {
     @Transient
     private Set<Long> eventIds = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @Where(clause = "START_DATE > NOW()")
     @Cascade(CascadeType.SAVE_UPDATE)
     @JoinTable(
             name = "UserEvents",
