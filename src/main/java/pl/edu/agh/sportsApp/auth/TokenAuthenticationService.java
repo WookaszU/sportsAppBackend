@@ -16,8 +16,8 @@ import pl.edu.agh.sportsApp.service.RegisterService;
 import pl.edu.agh.sportsApp.service.TokenStorage;
 import pl.edu.agh.sportsApp.service.UserService;
 import pl.edu.agh.sportsApp.token.TokenService;
-import pl.edu.agh.sportsApp.useractivity.UserActivityData;
-import pl.edu.agh.sportsApp.useractivity.UserActivityManager;
+import pl.edu.agh.sportsApp.useractivity.manager.UserActivityData;
+import pl.edu.agh.sportsApp.useractivity.manager.UserActivityManager;
 
 import javax.validation.constraints.NotNull;
 import java.util.Optional;

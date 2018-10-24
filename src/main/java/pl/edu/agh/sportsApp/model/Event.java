@@ -17,6 +17,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity(name = "event")
+@Table(indexes = {
+        @Index(name = "archive_index", columnList = "startDate")
+})
 @EqualsAndHashCode(exclude = {"id", "content", "ownerId", "owner", "participantIds", "participants"})
 @Data
 @Builder

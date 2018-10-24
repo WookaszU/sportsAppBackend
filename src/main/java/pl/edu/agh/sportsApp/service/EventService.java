@@ -11,7 +11,7 @@ import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
-import pl.edu.agh.sportsApp.repository.EventRepository;
+import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.UserRepository;
 
 import java.util.HashSet;
