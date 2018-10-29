@@ -20,7 +20,7 @@ public class EventDTO {
     private Long id;
 
     @NotNull
-    private String title;
+    private int categoryId;
 
     @NotNull
     @Latitude

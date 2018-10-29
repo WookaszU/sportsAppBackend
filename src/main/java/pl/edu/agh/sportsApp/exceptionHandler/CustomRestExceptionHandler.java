@@ -93,4 +93,10 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler({ValidationException.class})
+    public ResponseEntity<Object> handleValidationException(ValidationException ex) {
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+    }
+
 }

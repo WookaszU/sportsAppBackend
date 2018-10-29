@@ -32,7 +32,7 @@ public class Event {
     private Long id;
 
     @NotNull
-    private String title;
+    private int categoryId;
 
     @NotNull
     @Latitude
@@ -48,6 +48,7 @@ public class Event {
     @Column(length = 5000)
     private String content;
 
+    @NotNull
     @Column(name = "owner_id")
     private Long ownerId;
 
@@ -82,14 +83,14 @@ public class Event {
         this.getEventPhotos().add(eventPhoto);
     }
 
-    public void removeEventPhoto(EventPhoto eventPhoto){
+    public void removeEventPhoto(EventPhoto eventPhoto) {
         this.getEventPhotos().remove(eventPhoto);
     }
 
     public EventDTO mapToDTO() {
         return EventDTO.builder()
                 .id(this.getId())
-                .title(this.getTitle())
+                .categoryId(this.getCategoryId())
                 .latitude(this.getLatitude())
                 .longitude(this.getLongitude())
                 .startDate(this.getStartDate())

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.EventDTO;
 import pl.edu.agh.sportsApp.dto.EventRequestDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ValidationException;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.User;
@@ -14,11 +15,14 @@ import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static pl.edu.agh.sportsApp.dto.ResponseCode.METHOD_ARGS_NOT_VALID;
 
 @Service
 public class EventService {
@@ -34,6 +38,10 @@ public class EventService {
     }
 
     public void createEvent(EventRequestDTO eventRequestDTO, User owner) {
+        LocalDateTime currentDate = LocalDateTime.now();
+        if (eventRequestDTO.getCategoryId() < 0 || eventRequestDTO.getStartDate().isBefore(currentDate)
+                || eventRequestDTO.getStartDate().isAfter(currentDate.plusMonths(1)))
+            throw new ValidationException(METHOD_ARGS_NOT_VALID.name());
         EventChat eventChat = chatStorage.createEventChat();
         Event newEvent = eventRequestDTO.parseEvent();
         newEvent.setOwnerId(owner.getId());
@@ -41,9 +49,6 @@ public class EventService {
         Set<User> participants = new HashSet<>();
         participants.add(owner);
         newEvent.setParticipants(participants);
-        Set<Long> participantIds = new HashSet<>();
-        participantIds.add(owner.getId());
-        newEvent.setParticipantIds(participantIds);
         newEvent.setEventChat(eventChat);
         eventRepository.save(newEvent);
     }
@@ -68,9 +73,6 @@ public class EventService {
     }
 
     private Event fillEntity(Event event, Long participantId) {
-        Set<Long> userIds = event.getParticipantIds();
-        userIds.add(participantId);
-        event.setParticipantIds(userIds);
         Set<User> users = event.getParticipants();
         users.add(userRepository.getOne(participantId));
         event.setParticipants(users);
@@ -86,7 +88,7 @@ public class EventService {
             eventRepository.deleteById(eventID);
     }
 
-    public Optional<Event> findEventById(Long id){
+    public Optional<Event> findEventById(Long id) {
         return eventRepository.findById(id);
     }
 

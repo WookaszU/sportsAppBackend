@@ -125,7 +125,7 @@ public class Tests2 {
 
     private Event defaultEvent() {
         return Event.builder()
-                .title("title")
+                .categoryId(1)
                 .longitude(100D)
                 .latitude(100D)
                 .content("content")

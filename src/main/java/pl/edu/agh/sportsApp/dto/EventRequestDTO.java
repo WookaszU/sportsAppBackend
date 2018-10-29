@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EventRequestDTO {
     @NotNull
-    private String title;
+    private int categoryId;
 
     @NotNull
     @Latitude
@@ -34,7 +34,7 @@ public class EventRequestDTO {
 
     public Event parseEvent() {
         return Event.builder()
-                .title(this.getTitle())
+                .categoryId(this.getCategoryId())
                 .startDate(this.getStartDate())
                 .latitude(this.getLatitude())
                 .longitude(this.getLongitude())
