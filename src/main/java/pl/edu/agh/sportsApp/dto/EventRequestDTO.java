@@ -8,6 +8,7 @@ import org.hibernate.search.annotations.Latitude;
 import org.hibernate.search.annotations.Longitude;
 import pl.edu.agh.sportsApp.model.Event;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EventRequestDTO {
     @NotNull
-    private int categoryId;
+    @Min(0)
+    private Integer categoryId;
 
     @NotNull
     @Latitude

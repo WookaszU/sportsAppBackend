@@ -39,8 +39,7 @@ public class EventService {
 
     public void createEvent(EventRequestDTO eventRequestDTO, User owner) {
         LocalDateTime currentDate = LocalDateTime.now();
-        if (eventRequestDTO.getCategoryId() < 0 || eventRequestDTO.getStartDate().isBefore(currentDate)
-                || eventRequestDTO.getStartDate().isAfter(currentDate.plusMonths(1)))
+        if (eventRequestDTO.getStartDate().isBefore(currentDate) || eventRequestDTO.getStartDate().isAfter(currentDate.plusMonths(1)))
             throw new ValidationException(METHOD_ARGS_NOT_VALID.name());
         EventChat eventChat = chatStorage.createEventChat();
         Event newEvent = eventRequestDTO.parseEvent();

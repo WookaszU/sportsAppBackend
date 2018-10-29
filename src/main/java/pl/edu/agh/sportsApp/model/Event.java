@@ -10,6 +10,7 @@ import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -32,7 +33,8 @@ public class Event {
     private Long id;
 
     @NotNull
-    private int categoryId;
+    @Min(0)
+    private Integer categoryId;
 
     @NotNull
     @Latitude
@@ -70,7 +72,7 @@ public class Event {
     private Set<User> participants = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name= "chat_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "chat_id", referencedColumnName = "id", nullable = false)
     private EventChat eventChat;
 
     @Setter(AccessLevel.PRIVATE)
@@ -78,7 +80,7 @@ public class Event {
             orphanRemoval = true)
     private Set<EventPhoto> eventPhotos;
 
-    public void addEventPhoto(EventPhoto eventPhoto){
+    public void addEventPhoto(EventPhoto eventPhoto) {
         eventPhoto.setEvent(this);
         this.getEventPhotos().add(eventPhoto);
     }
