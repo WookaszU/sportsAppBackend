@@ -28,8 +28,10 @@ public class UserActivity {
         Event event = eventService.getEvent(eventId);
         Map<String, Boolean> userActivityMap = new HashMap<>();
 
-        for(User user : event.getParticipants()) {
-            userActivityMap.put(user.getUsername(), isUserActive(user.getUsername()));
+        Map<Long, User> eventParticipants = event.getParticipants();
+        for(Long userId : eventParticipants.keySet()) {
+            String userName = eventParticipants.get(userId).getUsername();
+            userActivityMap.put(userName, isUserActive(userName));
         }
 
         return userActivityMap;

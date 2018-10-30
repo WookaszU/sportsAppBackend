@@ -88,7 +88,7 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({MediaInaccesibleException.class})
-    public ResponseEntity<Object> handleAuthRefusedException(MediaInaccesibleException ex) {
+    public ResponseEntity<Object> handleMediaInaccesibleException(MediaInaccesibleException ex) {
         ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -97,6 +97,12 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleValidationException(ValidationException ex) {
         ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
         return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({NoPermissionsException.class})
+    public ResponseEntity<Object> handleNoPermissionsException(NoPermissionsException ex) {
+        ErrorDTO errorDTO = new ErrorDTO(ex.getMessage());
+        return new ResponseEntity<>(errorDTO, HttpStatus.FORBIDDEN);
     }
 
 }

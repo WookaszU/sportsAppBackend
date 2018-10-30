@@ -13,6 +13,7 @@ public enum ResponseCode {
 
     // all requests
     METHOD_ARGS_NOT_VALID,          // "Method arguments are not valid e.g. empty fields, wrong email.
+    NEED_REQUIRED_RIGHTS,             // "Need required user rights to gain access."
 
     // login
     CONFIRM_YOUR_ACCOUNT,           // "Confirm your new account."

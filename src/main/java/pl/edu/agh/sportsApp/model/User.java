@@ -14,16 +14,13 @@ import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(exclude = {"id", "userPhoto", "tokenIds", "tokens", "eventIds", "events"})
+@EqualsAndHashCode(exclude = {"id", "userPhoto", "tokenIds", "tokens", "eventIds", "events", "userRatings"})
 @Getter @Setter
 @Builder
 @AllArgsConstructor
@@ -50,6 +47,12 @@ public class User implements UserDetails {
 
     @NotNull
     private String lastName;
+
+    private Double rating;
+
+    @Setter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "ratedUser", fetch = FetchType.EAGER)
+    private Set<UserRating> userRatings;
 
     @Setter(AccessLevel.PRIVATE)
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = javax.persistence.CascadeType.ALL ,
@@ -87,12 +90,21 @@ public class User implements UserDetails {
         this.setUserPhoto(null);
     }
 
+    public void addUserRating(UserRating userRating) {
+        userRatings.add(userRating);
+    }
+
+    public void removeUserRating(UserRating userRating) {
+        userRatings.remove(userRating);
+    }
+
     public UserDTO mapToDTO() {
         UserDTO userDTO = UserDTO.builder()
                 .id(this.getId())
                 .email(this.getEmail())
                 .firstName(this.getFirstName())
                 .lastName(this.getLastName())
+                .rating(this.getRating())
                 .eventParticipantIds(this.getEvents().stream()
                         .map(Event::getId)
                         .collect(Collectors.toList()))

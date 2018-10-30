@@ -13,13 +13,10 @@ import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
-import pl.edu.agh.sportsApp.repository.UserRepository;
+import pl.edu.agh.sportsApp.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static pl.edu.agh.sportsApp.dto.ResponseCode.METHOD_ARGS_NOT_VALID;
@@ -45,8 +42,8 @@ public class EventService {
         Event newEvent = eventRequestDTO.parseEvent();
         newEvent.setOwnerId(owner.getId());
         newEvent.setOwner(owner);
-        Set<User> participants = new HashSet<>();
-        participants.add(owner);
+        Map<Long, User> participants = new HashMap<>();
+        participants.put(owner.getId(), owner);
         newEvent.setParticipants(participants);
         newEvent.setEventChat(eventChat);
         eventRepository.save(newEvent);
@@ -72,8 +69,9 @@ public class EventService {
     }
 
     private Event fillEntity(Event event, Long participantId) {
-        Set<User> users = event.getParticipants();
-        users.add(userRepository.getOne(participantId));
+        Map<Long, User> users = event.getParticipants();
+        User user = userRepository.getOne(participantId);
+        users.put(user.getId(), user);
         event.setParticipants(users);
         return event;
     }

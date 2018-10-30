@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Data
 @FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
 public class UserEventsListDTO {

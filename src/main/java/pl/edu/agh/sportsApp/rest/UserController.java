@@ -7,10 +7,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
-import pl.edu.agh.sportsApp.dto.UserDTO;
-import pl.edu.agh.sportsApp.dto.UserEventsListDTO;
-import pl.edu.agh.sportsApp.dto.UserModifyDTO;
+import pl.edu.agh.sportsApp.dto.*;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.service.RatingsService;
 import pl.edu.agh.sportsApp.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -30,6 +29,8 @@ final class UserController {
     AuthenticationService authenticationService;
     @NonNull
     UserService userService;
+    @NonNull
+    RatingsService ratingsService;
 
     @ApiOperation(value = "Get current user info.",
             notes = "Returns information about current user e.g. user photoId. ", response = UserDTO.class)
@@ -105,6 +106,31 @@ final class UserController {
     @GetMapping("/userHistory/{userId}")
     public UserEventsListDTO getUserHistoricEvents(@PathVariable Long userId) {
         return userService.getUserHistoricEvents(userId);
+    }
+
+    @ApiOperation(value = "Rate chosen user in given event.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Rate successfully updated."),
+            @ApiResponse(code = 400, message = "ResponseCodes = {METHOD_ARGS_NOT_VALID}"),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+            @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS}")
+    })
+    @PutMapping("/rate")
+    public void rateUserInEvent(@Valid @RequestBody UserRatingDTO userRatingDTO,
+                                @ApiIgnore @AuthenticationPrincipal final User user) {
+        ratingsService.handleRatingEvent(userRatingDTO, user);
+    }
+
+    @ApiOperation(value = "Get user ratings information.",
+            notes = "Returns user ratings. If not existing userId was given returns empty list.",
+            response = UserRatingListDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "User ratings successfully returned."),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+    })
+    @GetMapping("/ratings/{userId}")
+    public UserRatingListDTO getUserRatings(@PathVariable Long userId) {
+        return userService.getUserProfile(userId);
     }
 
 }
