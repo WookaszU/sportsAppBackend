@@ -8,11 +8,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.sportsApp.dto.UserEventsListDTO;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
+import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
-import pl.edu.agh.sportsApp.repository.UserRepository;
-import pl.edu.agh.sportsApp.repository.event.projection.EventData;
+import pl.edu.agh.sportsApp.repository.user.UserRepository;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
+import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +32,10 @@ public class UserService {
 
     public User getUserById(Long id) {
         return userRepository.getOne(id);
+    }
+
+    public Optional<User> findUserById(Long userId) {
+        return userRepository.findById(userId);
     }
 
     public User saveUser(User user) {
@@ -69,4 +74,10 @@ public class UserService {
     public UserEventsListDTO getUserHistoricEvents(Long userId) {
         return new UserEventsListDTO(eventRepository.getArchivedUserEvents(userId));
     }
+
+    public UserRatingListDTO getUserProfile(Long userId) {
+        List<UserRatingData> userRatings = userRepository.getUserRatingsWithEvaluativeNames(userId);
+        return new UserRatingListDTO(userRatings);
+    }
+
 }

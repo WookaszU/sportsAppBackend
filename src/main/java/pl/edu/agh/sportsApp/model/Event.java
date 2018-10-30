@@ -13,15 +13,13 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Entity(name = "event")
 @Table(indexes = {
         @Index(name = "archive_index", columnList = "startDate")
 })
-@EqualsAndHashCode(exclude = {"id", "content", "ownerId", "owner", "participantIds", "participants"})
+@EqualsAndHashCode(exclude = {"id", "content", "ownerId", "owner", "participantIds", "participants", "userRatings"})
 @Data
 @Builder
 @NoArgsConstructor
@@ -69,11 +67,16 @@ public class Event {
             inverseJoinColumns = {@JoinColumn(name = "users_id")}
     )
     @Builder.Default
-    private Set<User> participants = new HashSet<>();
+    @MapKeyColumn(name = "id")
+    private Map<Long, User> participants = new HashMap<>();
 
     @OneToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "chat_id", referencedColumnName = "id", nullable = false)
     private EventChat eventChat;
+
+    @Setter(AccessLevel.PRIVATE)
+    @OneToMany(mappedBy = "event")
+    private Set<UserRating> userRatings = new HashSet<>();
 
     @Setter(AccessLevel.PRIVATE)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "event", cascade = javax.persistence.CascadeType.ALL,
@@ -89,6 +92,14 @@ public class Event {
         this.getEventPhotos().remove(eventPhoto);
     }
 
+    public void addRating(UserRating userRating) {
+        userRatings.add(userRating);
+    }
+
+    public void removeRating(UserRating userRating) {
+        userRatings.remove(userRating);
+    }
+
     public EventDTO mapToDTO() {
         return EventDTO.builder()
                 .id(this.getId())
@@ -98,9 +109,7 @@ public class Event {
                 .startDate(this.getStartDate())
                 .content(this.getContent())
                 .ownerId(this.getOwnerId())
-                .participantIds(this.getParticipants().stream()
-                        .map(User::getId)
-                        .collect(Collectors.toList()))
+                .participantIds(new ArrayList<>(this.getParticipants().keySet()))
                 .build();
     }
 

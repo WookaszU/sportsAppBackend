@@ -106,6 +106,7 @@ public class PhotoService {
         if (file.getSize() > maxProfilePhotoSize)
             throw new PhotoProcessingException(ResponseCode.FILE_TOO_BIG.name());
 
+        String test = file.getContentType();
         if(file.getContentType() == null || !file.getContentType().matches("image/(.*)"))
             throw new PhotoProcessingException(ResponseCode.WRONG_FORMAT.name());
 
