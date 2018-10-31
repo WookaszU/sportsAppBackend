@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
 import pl.edu.agh.sportsApp.dto.*;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 import pl.edu.agh.sportsApp.service.RatingsService;
 import pl.edu.agh.sportsApp.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static lombok.AccessLevel.PACKAGE;
 import static lombok.AccessLevel.PRIVATE;
@@ -86,25 +89,29 @@ final class UserController {
         return userService.getUserById(userId).mapToDTO();
     }
 
-    @ApiOperation(value = "Get current user active events.", response = UserEventsListDTO.class)
+    @ApiOperation(value = "Get current user active events.",
+            notes = "If not existing userId was given, the result will be an empty list.",
+            response = EventData.class,
+            responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Events list returned."),
             @ApiResponse(code = 401, message = "Log first to gain access."),
     })
     @GetMapping("/myEventsList")
-    public UserEventsListDTO getUserActiveEvents(@ApiIgnore @AuthenticationPrincipal final User user) {
+    public List<EventData> getUserActiveEvents(@ApiIgnore @AuthenticationPrincipal final User user) {
         return userService.getUserActiveEvents(user);
     }
 
     @ApiOperation(value = "Get given user historic events.",
             notes = "If not existing userId was given, the result will be an empty list.",
-            response = UserEventsListDTO.class)
+            response = EventData.class,
+            responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Events list returned."),
             @ApiResponse(code = 401, message = "Log first to gain access."),
     })
     @GetMapping("/userHistory/{userId}")
-    public UserEventsListDTO getUserHistoricEvents(@PathVariable Long userId) {
+    public List<EventData> getUserHistoricEvents(@PathVariable Long userId) {
         return userService.getUserHistoricEvents(userId);
     }
 

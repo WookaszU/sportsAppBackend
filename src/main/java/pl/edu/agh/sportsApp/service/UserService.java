@@ -6,11 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.sportsApp.dto.UserEventsListDTO;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
 import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
+import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
@@ -67,12 +67,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserEventsListDTO getUserActiveEvents(User user) {
-        return new UserEventsListDTO(eventRepository.getActualUserEvents(user.getId()));
+    public List<EventData> getUserActiveEvents(User user) {
+        return eventRepository.getActualUserEvents(user.getId());
     }
 
-    public UserEventsListDTO getUserHistoricEvents(Long userId) {
-        return new UserEventsListDTO(eventRepository.getArchivedUserEvents(userId));
+    public List<EventData> getUserHistoricEvents(Long userId) {
+        return eventRepository.getArchivedUserEvents(userId);
     }
 
     public UserRatingListDTO getUserProfile(Long userId) {
