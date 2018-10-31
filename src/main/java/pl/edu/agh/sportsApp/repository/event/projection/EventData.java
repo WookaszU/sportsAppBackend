@@ -10,6 +10,6 @@ public interface EventData {
 
     LocalDateTime getStartDate();
 
-    String getTitle();
+    Long getCategoryId();
 
 }
