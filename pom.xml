@@ -60,18 +60,26 @@
             <type>pom</type>
         </dependency>
 
-        <!--      UNCOMMENT  MYSQL here and in properties!!!! , COMMENT H2 BELOW mysql connector property   -->
+        <!-- MySQL          UNCOMMENT here and in properties. COMMENT H2 BELOW. -->
         <!--<dependency>-->
         <!--<groupId>mysql</groupId>-->
         <!--<artifactId>mysql-connector-java</artifactId>-->
         <!--<version>8.0.11</version>-->
         <!--</dependency>-->
 
+        <!--  POSTGRES      UNCOMMENT here and in properties. COMMENT H2 BELOW. -->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.197</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
+            <scope>runtime</scope>
         </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>com.h2database</groupId>-->
+            <!--<artifactId>h2</artifactId>-->
+            <!--<version>1.4.197</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>com.google.oauth-client</groupId>
