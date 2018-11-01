@@ -1,38 +1,27 @@
 package pl.edu.agh.sportsApp;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.EventListener;
+import pl.edu.agh.sportsApp.app.AppStartupTasks;
 
-import java.io.File;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @SpringBootApplication
+@RequiredArgsConstructor
 public class Application {
 
-    private final static Logger logger = Logger.getLogger(Application.class.getName());
-    private static ConfigurableApplicationContext ctx;
+    private final AppStartupTasks appStartupTasks;
 
     public static void main(String[] args) {
-        ctx = SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public void afterStartupTasks() {
-        prepareFileStorageDirectories();
+        appStartupTasks.prepareFileStorageDirectories();
+        appStartupTasks.runDatabaseScripts("postgresScripts.sql");
     }
 
-    private void prepareFileStorageDirectories() {
-        File file = new File("files/avatars");
-        if (file.exists())
-            return;
-
-        if (!file.mkdirs()) {
-            logger.log(Level.SEVERE, "Could not create required directories! Closing application.");
-            SpringApplication.exit(ctx);
-        }
-    }
 }
