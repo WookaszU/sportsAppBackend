@@ -20,7 +20,6 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class RatingsService {
 
-    UserService userService;
     UserRatingStorage ratingStorage;
     EventService eventService;
 
@@ -34,15 +33,6 @@ public class RatingsService {
             updateUserRating(ratingDTO, userRatingOpt.get(), user);
         else
             createUserRating(ratingDTO, user);
-
-        updateAvgRating(ratingDTO.getUserId());
-    }
-
-    // TODO change it to TRIGGER, code for trigger in import.sql >> h2 db not support sql triggers > mysql
-    private void updateAvgRating(Long userId) {
-        User user = userService.getUserById(userId);
-        user.setRating(ratingStorage.getUserAvgRating(userId));
-        userService.saveUser(user);
     }
 
     private Event validRatingCreateArgs(UserRatingDTO userRatingDTO, User user) {
