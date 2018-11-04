@@ -101,6 +101,8 @@ public class Event {
     }
 
     public EventDTO mapToDTO() {
+        LinkedList<Long> participantIds = new LinkedList<>(this.getParticipants().keySet());
+        participantIds.remove(this.getOwnerId());
         return EventDTO.builder()
                 .id(this.getId())
                 .categoryId(this.getCategoryId())
@@ -109,7 +111,7 @@ public class Event {
                 .startDate(this.getStartDate())
                 .content(this.getContent())
                 .ownerId(this.getOwnerId())
-                .participantIds(new ArrayList<>(this.getParticipants().keySet()))
+                .participantIds(participantIds)
                 .build();
     }
 

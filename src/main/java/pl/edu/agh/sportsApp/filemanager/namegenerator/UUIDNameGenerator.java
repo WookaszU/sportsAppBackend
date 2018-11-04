@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import pl.edu.agh.sportsApp.dateservice.DateService;
 
 import java.util.UUID;
 

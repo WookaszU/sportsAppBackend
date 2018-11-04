@@ -13,7 +13,7 @@ public enum ResponseCode {
 
     // all requests
     METHOD_ARGS_NOT_VALID,          // "Method arguments are not valid e.g. empty fields, wrong email.
-    NEED_REQUIRED_RIGHTS,             // "Need required user rights to gain access."
+    NEED_REQUIRED_RIGHTS,           // "Need required user rights to gain access."
 
     // login
     CONFIRM_YOUR_ACCOUNT,           // "Confirm your new account."
@@ -28,5 +28,6 @@ public enum ResponseCode {
     RESOURCE_NOT_FOUND,             // "Resource was not found on server."
 
     // whole app
-    ACCESS_DENIED                   // "Access denied to resource."
+    ACCESS_DENIED,                   // "Access denied to resource."
+    PERMISSION_DENIED                // "Permission denied to resource."
 }

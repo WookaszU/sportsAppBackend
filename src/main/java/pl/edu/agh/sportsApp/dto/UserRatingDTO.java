@@ -1,6 +1,7 @@
 package pl.edu.agh.sportsApp.dto;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Max;

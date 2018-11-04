@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
@@ -24,4 +25,5 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "WHERE UE.USERS_ID = :userId AND E.START_DATE < NOW() + INTERVAL '30 minutes'", nativeQuery = true)
     List<EventData> getArchivedUserEvents(@Param("userId") Long userId);
 
+    List<Event> getALlByStartDateIsBetween(LocalDateTime startDate, LocalDateTime endDate);
 }

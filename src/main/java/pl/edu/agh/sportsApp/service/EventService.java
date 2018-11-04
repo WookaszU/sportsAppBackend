@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.EventDTO;
 import pl.edu.agh.sportsApp.dto.EventRequestDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.NoPermissionsException;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ValidationException;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
@@ -16,7 +17,10 @@ import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static pl.edu.agh.sportsApp.dto.ResponseCode.METHOD_ARGS_NOT_VALID;
@@ -51,12 +55,16 @@ public class EventService {
 
     public void addParticipant(Long eventId, Long participantId) {
         Event event = eventRepository.getOne(eventId);
-        eventRepository.save(fillEntity(event, participantId));
+        if (event.getOwner().getId().equals(participantId))
+            throw new NoPermissionsException(ResponseCode.PERMISSION_DENIED.name());
+        eventRepository.save(addUserToEvent(event, participantId));
     }
 
     public void removeParticipant(Long eventId, Long participantId) {
         Event event = eventRepository.getOne(eventId);
-        eventRepository.save(fillEntity(event, participantId));
+        if (event.getOwner().getId().equals(participantId))
+            throw new NoPermissionsException(ResponseCode.PERMISSION_DENIED.name());
+        eventRepository.save(removeUserFromEvent(event, participantId));
     }
 
     public Event getEvent(Long id) {
@@ -68,10 +76,18 @@ public class EventService {
         eventRepository.deleteById(event.getId());
     }
 
-    private Event fillEntity(Event event, Long participantId) {
+    private Event addUserToEvent(Event event, Long participantId) {
         Map<Long, User> users = event.getParticipants();
         User user = userRepository.getOne(participantId);
         users.put(user.getId(), user);
+        event.setParticipants(users);
+        return event;
+    }
+
+    private Event removeUserFromEvent(Event event, Long participantId) {
+        Map<Long, User> users = event.getParticipants();
+        User user = userRepository.getOne(participantId);
+        users.remove(user.getId());
         event.setParticipants(users);
         return event;
     }
@@ -100,7 +116,9 @@ public class EventService {
     }
 
     public List<EventDTO> getAllEvents() {
-        return eventRepository.findAll().stream()
+        LocalDateTime startDate = LocalDateTime.now().minusMinutes(30);
+        LocalDateTime endDate = startDate.plusMonths(1);
+        return eventRepository.getALlByStartDateIsBetween(startDate, endDate).stream()
                 .map(Event::mapToDTO)
                 .collect(Collectors.toList());
     }

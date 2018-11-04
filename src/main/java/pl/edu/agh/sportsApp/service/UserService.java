@@ -10,9 +10,9 @@ import pl.edu.agh.sportsApp.dto.UserModifyDTO;
 import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
+import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
-import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
 
 import java.util.List;

@@ -2,7 +2,6 @@ package pl.edu.agh.sportsApp.model.photo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.edu.agh.sportsApp.model.User;
 
 import javax.persistence.*;
 

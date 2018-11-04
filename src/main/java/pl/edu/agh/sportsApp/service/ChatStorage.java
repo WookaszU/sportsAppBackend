@@ -5,9 +5,9 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.chat.PrivateChat;
-import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.repository.chat.EventChatRepository;
 import pl.edu.agh.sportsApp.repository.chat.PrivateChatRepository;
 

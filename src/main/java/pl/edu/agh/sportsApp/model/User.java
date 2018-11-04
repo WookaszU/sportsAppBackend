@@ -14,14 +14,18 @@ import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"id", "userPhoto", "tokenIds", "tokens", "eventIds", "events", "userRatings"})
-@Getter @Setter
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -55,7 +59,7 @@ public class User implements UserDetails {
     private Set<UserRating> userRatings;
 
     @Setter(AccessLevel.PRIVATE)
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = javax.persistence.CascadeType.ALL ,
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "user", cascade = javax.persistence.CascadeType.ALL,
             orphanRemoval = true)
     private ProfilePhoto userPhoto;
 
@@ -81,12 +85,12 @@ public class User implements UserDetails {
     @Builder.Default
     private Set<Event> events = new HashSet<>();
 
-    public void setPhoto(ProfilePhoto photo){
+    public void setPhoto(ProfilePhoto photo) {
         photo.setUser(this);
         this.setUserPhoto(photo);
     }
 
-    public void deletePhoto(){
+    public void deletePhoto() {
         this.setUserPhoto(null);
     }
 
@@ -105,7 +109,7 @@ public class User implements UserDetails {
                 .firstName(this.getFirstName())
                 .lastName(this.getLastName())
                 .rating(this.getRating())
-                .eventParticipantIds(this.getEvents().stream()
+                .currentEventParticipantIds(this.getEvents().stream()
                         .map(Event::getId)
                         .collect(Collectors.toList()))
                 .build();

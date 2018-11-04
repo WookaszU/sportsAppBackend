@@ -1,13 +1,19 @@
 package pl.edu.agh.sportsApp.rest;
 
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
-import pl.edu.agh.sportsApp.dto.*;
+import pl.edu.agh.sportsApp.dto.UserDTO;
+import pl.edu.agh.sportsApp.dto.UserModifyDTO;
+import pl.edu.agh.sportsApp.dto.UserRatingDTO;
+import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 import pl.edu.agh.sportsApp.service.RatingsService;
@@ -15,7 +21,6 @@ import pl.edu.agh.sportsApp.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static lombok.AccessLevel.PACKAGE;
@@ -100,6 +105,19 @@ final class UserController {
     @GetMapping("/myEventsList")
     public List<EventData> getUserActiveEvents(@ApiIgnore @AuthenticationPrincipal final User user) {
         return userService.getUserActiveEvents(user);
+    }
+
+    @ApiOperation(value = "Get user historic events.",
+            notes = "If not existing userId was given, the result will be an empty list.",
+            response = EventData.class,
+            responseContainer = "List")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Events list returned."),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+    })
+    @GetMapping("/myHistoricEventsList")
+    public List<EventData> getMyHistoricEvents(@ApiIgnore @AuthenticationPrincipal final User user) {
+        return userService.getUserHistoricEvents(user.getId());
     }
 
     @ApiOperation(value = "Get given user historic events.",

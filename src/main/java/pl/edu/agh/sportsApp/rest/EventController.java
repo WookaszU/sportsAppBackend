@@ -15,7 +15,6 @@ import pl.edu.agh.sportsApp.service.EventService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -103,7 +102,7 @@ public class EventController {
             @ApiResponse(code = 401, message = "Log first to gain access.")
     })
     @GetMapping
-    public List<EventDTO> getAllEvents(){
+    public List<EventDTO> getAllEvents() {
         return eventService.getAllEvents();
     }
 }

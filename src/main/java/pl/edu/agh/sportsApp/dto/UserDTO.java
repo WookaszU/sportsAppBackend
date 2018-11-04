@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Data
@@ -37,8 +37,5 @@ public class UserDTO {
     private String photoId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<Long> eventOwnedIds = new ArrayList<>();
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<Long> eventParticipantIds = new ArrayList<>();
+    private List<Long> currentEventParticipantIds = new LinkedList<>();
 }

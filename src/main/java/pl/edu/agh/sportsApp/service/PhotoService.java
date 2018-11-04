@@ -1,7 +1,6 @@
 package pl.edu.agh.sportsApp.service;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +12,9 @@ import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.PhotoProcessingException;
 import pl.edu.agh.sportsApp.filemanager.PhotoManager;
 import pl.edu.agh.sportsApp.model.Event;
+import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.model.photo.Photo;
-import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 
 import javax.persistence.EntityNotFoundException;
