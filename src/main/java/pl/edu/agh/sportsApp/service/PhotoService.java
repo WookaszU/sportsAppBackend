@@ -44,8 +44,7 @@ public class PhotoService {
     }
 
     private void setProfilePhoto(User user, MultipartFile file) {
-        if(user.getUserPhoto() != null)
-            removeProfilePhoto(user);
+        Photo currentPhoto = user.getUserPhoto();
 
         ProfilePhoto photo;
         try {
@@ -53,7 +52,8 @@ public class PhotoService {
         } catch (IOException e) {
             throw new PhotoProcessingException(ResponseCode.MEDIA_SERVICE_NOT_AVAILABLE.name());
         }
-
+        if(currentPhoto != null)
+            photo.setId(currentPhoto.getId());
         userService.setUserAvatar(user, photo);
     }
 
@@ -105,7 +105,6 @@ public class PhotoService {
         if (file.getSize() > maxProfilePhotoSize)
             throw new PhotoProcessingException(ResponseCode.FILE_TOO_BIG.name());
 
-        String test = file.getContentType();
         if(file.getContentType() == null || !file.getContentType().matches("image/(.*)"))
             throw new PhotoProcessingException(ResponseCode.WRONG_FORMAT.name());
 

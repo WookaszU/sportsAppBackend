@@ -125,6 +125,14 @@ public class EventService {
     }
 
     public List<RatingFormElement> getUserRatingFormForEvent(Long eventId, Long userId) {
-        return eventRepository.getUserRatingFormForEvent(eventId, userId);
+        List<RatingFormElement> ratingFormElements = eventRepository.getUserRatingFormForEvent(eventId, userId);
+
+        for(RatingFormElement formElement: ratingFormElements)
+            if(formElement.getUserId().equals(userId)) {
+                ratingFormElements.remove(formElement);
+                return ratingFormElements;
+            }
+
+        throw new AccessDeniedException(ResponseCode.ACCESS_DENIED.name());
     }
 }
