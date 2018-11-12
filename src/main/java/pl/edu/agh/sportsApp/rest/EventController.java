@@ -119,7 +119,8 @@ public class EventController {
             @ApiResponse(code = 200, message = "Ratings successfully updated."),
             @ApiResponse(code = 400, message = "ResponseCodes = {METHOD_ARGS_NOT_VALID}"),
             @ApiResponse(code = 401, message = "Log first to gain access."),
-            @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS}")
+            @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS, ACCESS_DENIED}. " +
+                                                "Access_denied returned when event is current.")
     })
     @PostMapping("/rate/{eventId}/confirm")
     public void rateEventParticipants(@PathVariable("eventId") Long eventId,
@@ -132,14 +133,14 @@ public class EventController {
             notes = "If user on list was not rated before then his rating value will be null.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Returned successfully."),
-            @ApiResponse(code = 400, message = "ResponseCodes = {METHOD_ARGS_NOT_VALID}"),
+            @ApiResponse(code = 400, message = "Wrong argument type."),
             @ApiResponse(code = 401, message = "Log first to gain access."),
             @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS}")
     })
     @GetMapping("/rate/{eventId}")
     public List<RatingFormElement> getEventRatingFormData(@PathVariable("eventId") Long eventId,
                                                           @ApiIgnore @AuthenticationPrincipal User user) {
-        return ratingsService.getUserRatingForm(eventId, user);
+        return eventService.getUserRatingFormForEvent(eventId, user.getId());
     }
 
 }

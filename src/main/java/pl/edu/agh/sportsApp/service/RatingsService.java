@@ -11,9 +11,9 @@ import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ValidationException;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.UserRating;
-import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -59,6 +59,9 @@ public class RatingsService {
             throw new EntityNotFoundException(ResponseCode.METHOD_ARGS_NOT_VALID.name());
 
         Event event = eventOpt.get();
+        if(event.getStartDate().isAfter(LocalDateTime.now()))
+            throw new NoPermissionsException(ResponseCode.ACCESS_DENIED.name());
+
         if(!event.getParticipants().containsKey(evaluativeUser.getId()))
             throw new NoPermissionsException(ResponseCode.NEED_REQUIRED_RIGHTS.name());
 
@@ -89,10 +92,6 @@ public class RatingsService {
             userRating.setRating(userRatingUpdate.getRating().doubleValue());
 
         return userRating;
-    }
-
-    public List<RatingFormElement> getUserRatingForm(Long eventId, User user) {
-        return eventService.getUserRatingFormForEvent(eventId, user.getId());
     }
 
 }
