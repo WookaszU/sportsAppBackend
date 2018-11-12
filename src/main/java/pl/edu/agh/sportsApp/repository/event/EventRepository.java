@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
+import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +25,15 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "INNER JOIN USER_EVENTS AS UE ON E.ID = UE.EVENT_ID\n" +
             "WHERE UE.USERS_ID = :userId AND E.START_DATE < NOW() + INTERVAL '30 minutes'", nativeQuery = true)
     List<EventData> getArchivedUserEvents(@Param("userId") Long userId);
+
+    @Query(value = "SELECT users_id userId, U.first_name firstName, U.last_name lastName, P.photo_id photoId, UR.rating rating\n" +
+            "FROM user_events  UE\n" +
+            "INNER JOIN users  U ON UE.users_id = U.id\n" +
+            "LEFT JOIN profile_photo PP ON U.id = PP.user_id\n" +
+            "LEFT JOIN photo P ON PP.id = P.id\n" +
+            "LEFT JOIN user_rating UR ON U.id = UR.rated_user_id AND UR.evaluative_user_id = :userId\n" +
+            "WHERE UE.event_id = :eventId", nativeQuery = true)
+    List<RatingFormElement> getUserRatingFormForEvent(@Param("eventId") Long eventId, @Param("userId") Long userId);
 
     List<Event> getALlByStartDateIsBetween(LocalDateTime startDate, LocalDateTime endDate);
 }

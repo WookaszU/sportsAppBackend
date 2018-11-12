@@ -33,4 +33,10 @@ public class UserActivityManager {
         return ofNullable(activeUsers.get(userName));
     }
 
+    public Optional<User> findByToken(String token) {
+        for(Map.Entry<String, UserActivityData> entry: activeUsers.entrySet())
+            if(entry.getValue().getToken().equals(token))
+                return Optional.of(entry.getValue().getUser());
+        return Optional.empty();
+    }
 }

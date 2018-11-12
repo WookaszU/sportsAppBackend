@@ -14,6 +14,7 @@ import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
+import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
 
 import java.time.LocalDateTime;
@@ -121,5 +122,9 @@ public class EventService {
         return eventRepository.getALlByStartDateIsBetween(startDate, endDate).stream()
                 .map(Event::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<RatingFormElement> getUserRatingFormForEvent(Long eventId, Long userId) {
+        return eventRepository.getUserRatingFormForEvent(eventId, userId);
     }
 }

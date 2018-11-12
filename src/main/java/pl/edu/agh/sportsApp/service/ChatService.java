@@ -22,10 +22,10 @@ public class ChatService {
     ChatMessageStorage messageStorage;
 
     @Async
-    public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId, final User user){
+    public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId, final Long userId){
 
         Message message = messageStorage.save(Message.builder()
-                .senderId(user.getId())
+                .senderId(userId)
                 .conversationId(Long.parseLong(chatId))
                 .content(msg.getContent())
                 .creationTime(dateService.now())

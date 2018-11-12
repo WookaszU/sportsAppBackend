@@ -4,14 +4,20 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.dto.EventDTO;
 import pl.edu.agh.sportsApp.dto.EventRequestDTO;
+import pl.edu.agh.sportsApp.dto.UserRatingDTO;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
 import pl.edu.agh.sportsApp.service.EventService;
+import pl.edu.agh.sportsApp.service.RatingsService;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
@@ -23,13 +29,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/events", produces = APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
+@FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
 public class EventController {
-    private final EventService eventService;
 
-    @Autowired
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
-    }
+    @NonNull
+    EventService eventService;
+    @NonNull
+    RatingsService ratingsService;
 
     @ApiOperation(value = "Create new event (date format: \"YYYY-MM-DDTHH-mm-ss\"")
     @ApiResponses(value = {
@@ -105,4 +112,34 @@ public class EventController {
     public List<EventDTO> getAllEvents() {
         return eventService.getAllEvents();
     }
+
+    @ApiOperation(value = "Rate participants in finished event.",
+            notes = "It is not needed to pass all users from event.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Ratings successfully updated."),
+            @ApiResponse(code = 400, message = "ResponseCodes = {METHOD_ARGS_NOT_VALID}"),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+            @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS}")
+    })
+    @PostMapping("/rate/{eventId}/confirm")
+    public void rateEventParticipants(@PathVariable("eventId") Long eventId,
+                                      @RequestBody List<UserRatingDTO> usersRatings,
+                                      @ApiIgnore @AuthenticationPrincipal User evaluativeUser) {
+        ratingsService.rateEventParticipants(eventId, usersRatings, evaluativeUser);
+    }
+
+    @ApiOperation(value = "Get data required to create participants rating form view on frontend.",
+            notes = "If user on list was not rated before then his rating value will be null.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Returned successfully."),
+            @ApiResponse(code = 400, message = "ResponseCodes = {METHOD_ARGS_NOT_VALID}"),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+            @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS}")
+    })
+    @GetMapping("/rate/{eventId}")
+    public List<RatingFormElement> getEventRatingFormData(@PathVariable("eventId") Long eventId,
+                                                          @ApiIgnore @AuthenticationPrincipal User user) {
+        return ratingsService.getUserRatingForm(eventId, user);
+    }
+
 }

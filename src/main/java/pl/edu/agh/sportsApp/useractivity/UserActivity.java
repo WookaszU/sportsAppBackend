@@ -11,6 +11,7 @@ import pl.edu.agh.sportsApp.useractivity.manager.UserActivityManager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -37,6 +38,8 @@ public class UserActivity {
         return userActivityMap;
     }
 
-
+    public Optional<User> findUserByToken(String token) {
+        return userActivityManager.findByToken(token);
+    }
 
 }

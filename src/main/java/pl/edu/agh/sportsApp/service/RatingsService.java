@@ -11,8 +11,11 @@ import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ValidationException;
 import pl.edu.agh.sportsApp.model.Event;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.UserRating;
+import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,28 +26,40 @@ public class RatingsService {
     UserRatingStorage ratingStorage;
     EventService eventService;
 
-    public void handleRatingEvent(UserRatingDTO ratingDTO, User user) {
-        if(ratingDTO.getUserId().equals(user.getId()))
-            throw new ValidationException(ResponseCode.METHOD_ARGS_NOT_VALID.name());
+    public void rateEventParticipants(Long eventId, List<UserRatingDTO> usersRatings, User evaluativeUser) {
+        checkRatingsCorrectness(usersRatings, evaluativeUser.getId());
+        List<UserRating> ratingsToSave = new LinkedList<>();
 
-        Optional<UserRating> userRatingOpt = ratingStorage.findUserRatingByDtoArgs(
-                ratingDTO.getUserId(), ratingDTO.getEventId(), user.getId());
-        if(userRatingOpt.isPresent())
-            updateUserRating(ratingDTO, userRatingOpt.get(), user);
-        else
-            createUserRating(ratingDTO, user);
+        for(UserRatingDTO rating: usersRatings)
+            ratingsToSave.add(rateSingleParticipant(rating, eventId, evaluativeUser));
+
+        ratingStorage.saveAll(ratingsToSave);
     }
 
-    private Event validRatingCreateArgs(UserRatingDTO userRatingDTO, User user) {
-        if(userRatingDTO.getRating() == null)
-            throw new ValidationException(ResponseCode.METHOD_ARGS_NOT_VALID.name());
+    private UserRating rateSingleParticipant(UserRatingDTO ratingDTO, Long eventId, User evaluativeUser) {
+        Optional<UserRating> userRatingOpt = ratingStorage.findUserRatingByDtoArgs(
+                ratingDTO.getUserId(), eventId, evaluativeUser.getId());
 
-        Optional<Event> eventOpt = eventService.findEventById(userRatingDTO.getEventId());
+        return userRatingOpt.isPresent() ?
+                updateUserRating(ratingDTO, userRatingOpt.get()) :
+                createUserRating(ratingDTO, eventId, evaluativeUser);
+    }
+
+    private void checkRatingsCorrectness(List<UserRatingDTO> usersRatings, Long evaluativeUserId) {
+        for(UserRatingDTO rating: usersRatings)
+            if(rating.getUserId().equals(evaluativeUserId) ||
+                    rating.getRating() == null ||
+                    rating.getRating() > 5 || rating.getRating() < 1)
+                throw new ValidationException(ResponseCode.METHOD_ARGS_NOT_VALID.name());
+    }
+
+    private Event checkRatingCreateArguments(UserRatingDTO userRatingDTO, Long eventId, User evaluativeUser) {
+        Optional<Event> eventOpt = eventService.findEventById(eventId);
         if(!eventOpt.isPresent())
             throw new EntityNotFoundException(ResponseCode.METHOD_ARGS_NOT_VALID.name());
 
         Event event = eventOpt.get();
-        if(!event.getParticipants().containsKey(user.getId()))
+        if(!event.getParticipants().containsKey(evaluativeUser.getId()))
             throw new NoPermissionsException(ResponseCode.NEED_REQUIRED_RIGHTS.name());
 
         if(!event.getParticipants().containsKey(userRatingDTO.getUserId()))
@@ -53,38 +68,31 @@ public class RatingsService {
         return event;
     }
 
-    private void createUserRating(UserRatingDTO userRatingDTO, User user) {
-        Event event = validRatingCreateArgs(userRatingDTO, user);
+    private UserRating createUserRating(UserRatingDTO userRatingDTO,Long eventId, User evaluativeUser) {
+        Event event = checkRatingCreateArguments(userRatingDTO, eventId, evaluativeUser);
 
         UserRating userRating = UserRating.builder()
                 .rating(userRatingDTO.getRating().doubleValue())
-                .evaluativeUserId(user.getId())
+                .evaluativeUserId(evaluativeUser.getId())
                 .ratedUser(event.getParticipants().get(userRatingDTO.getUserId()))
                 .event(event)
-                .description(userRatingDTO.getDescription() != null ? userRatingDTO.getDescription() : "")
                 .build();
 
         userRating.getEvent().addRating(userRating);
         userRating.getRatedUser().addUserRating(userRating);
 
-        ratingStorage.save(userRating);
+        return userRating;
     }
 
-    private void validRatingUpdateArgs(UserRating userRating, User user) {
-        if(!user.getId().equals(userRating.getEvaluativeUserId()))
-            throw new NoPermissionsException(ResponseCode.NEED_REQUIRED_RIGHTS.name());
-    }
-
-    private void updateUserRating(UserRatingDTO userRatingUpdate, UserRating userRating, User user) {
-        validRatingUpdateArgs(userRating, user);
-
+    private UserRating updateUserRating(UserRatingDTO userRatingUpdate, UserRating userRating) {
         if(userRatingUpdate.getRating() != null)
             userRating.setRating(userRatingUpdate.getRating().doubleValue());
 
-        if(userRatingUpdate.getDescription() != null)
-            userRating.setDescription(userRatingUpdate.getDescription());
+        return userRating;
+    }
 
-        ratingStorage.save(userRating);
+    public List<RatingFormElement> getUserRatingForm(Long eventId, User user) {
+        return eventService.getUserRatingFormForEvent(eventId, user.getId());
     }
 
 }
