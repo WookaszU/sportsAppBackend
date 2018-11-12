@@ -29,6 +29,10 @@ public class UserRatingStorage {
         ratingRepository.save(userRating);
     }
 
+    public void saveAll(List<UserRating> usersRatings) {
+        ratingRepository.saveAll(usersRatings);
+    }
+
     public void remove(Long id) {
         ratingRepository.deleteById(id);
     }

@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
 import pl.edu.agh.sportsApp.dto.UserDTO;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
-import pl.edu.agh.sportsApp.dto.UserRatingDTO;
 import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
-import pl.edu.agh.sportsApp.service.RatingsService;
 import pl.edu.agh.sportsApp.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -37,8 +35,6 @@ final class UserController {
     AuthenticationService authenticationService;
     @NonNull
     UserService userService;
-    @NonNull
-    RatingsService ratingsService;
 
     @ApiOperation(value = "Get current user info.",
             notes = "Returns information about current user e.g. user photoId. ", response = UserDTO.class)
@@ -131,19 +127,6 @@ final class UserController {
     @GetMapping("/userHistory/{userId}")
     public List<EventData> getUserHistoricEvents(@PathVariable Long userId) {
         return userService.getUserHistoricEvents(userId);
-    }
-
-    @ApiOperation(value = "Rate chosen user in given event.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Rate successfully updated."),
-            @ApiResponse(code = 400, message = "ResponseCodes = {METHOD_ARGS_NOT_VALID}"),
-            @ApiResponse(code = 401, message = "Log first to gain access."),
-            @ApiResponse(code = 403, message = "ResponseCodes = {NEED_REQUIRED_RIGHTS}")
-    })
-    @PutMapping("/rate")
-    public void rateUserInEvent(@Valid @RequestBody UserRatingDTO userRatingDTO,
-                                @ApiIgnore @AuthenticationPrincipal final User user) {
-        ratingsService.handleRatingEvent(userRatingDTO, user);
     }
 
     @ApiOperation(value = "Get user ratings information.",

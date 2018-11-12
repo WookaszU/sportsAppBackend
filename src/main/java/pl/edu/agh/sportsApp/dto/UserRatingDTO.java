@@ -15,13 +15,8 @@ public class UserRatingDTO {
     @NotNull
     Long userId;
 
-    @NotNull
-    Long eventId;
-
     @Min(value = 1, message = "Rate must be integer between 1 and 5.")
     @Max(value = 5, message = "Rate must be integer between 1 and 5.")
     Integer rating;
-
-    String description;
 
 }
