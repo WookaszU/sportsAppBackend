@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 public class UploadResponseDTO {
 
     ResourceType type;
+
     String resourceId;
 
 }

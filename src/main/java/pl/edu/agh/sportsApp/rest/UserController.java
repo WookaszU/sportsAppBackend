@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.sportsApp.auth.AuthenticationService;
 import pl.edu.agh.sportsApp.dto.UserDTO;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
+import pl.edu.agh.sportsApp.dto.UserProfileViewDTO;
 import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
+import pl.edu.agh.sportsApp.repository.user.projection.UserData;
 import pl.edu.agh.sportsApp.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -104,7 +106,7 @@ final class UserController {
     }
 
     @ApiOperation(value = "Get user historic events.",
-            notes = "If not existing userId was given, the result will be an empty list.",
+            notes = "Endpoint for current user.",
             response = EventData.class,
             responseContainer = "List")
     @ApiResponses(value = {
@@ -138,7 +140,19 @@ final class UserController {
     })
     @GetMapping("/ratings/{userId}")
     public UserRatingListDTO getUserRatings(@PathVariable Long userId) {
+        return userService.getUserRatings(userId);
+    }
+
+    @ApiOperation(value = "Returns data need to construct profile view for user with given id.",
+            response = UserProfileViewDTO.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "User ratings successfully returned."),
+            @ApiResponse(code = 401, message = "Log first to gain access."),
+    })
+    @GetMapping("/profile/{userId}")
+    public UserProfileViewDTO getUserProfile(@PathVariable Long userId) {
         return userService.getUserProfile(userId);
     }
+
 
 }

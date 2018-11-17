@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.dto.UserModifyDTO;
+import pl.edu.agh.sportsApp.dto.UserProfileViewDTO;
 import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
@@ -14,7 +16,9 @@ import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
 import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
+import pl.edu.agh.sportsApp.repository.user.projection.UserData;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,9 +79,18 @@ public class UserService {
         return eventRepository.getArchivedUserEvents(userId);
     }
 
-    public UserRatingListDTO getUserProfile(Long userId) {
+    // TODO check it, not used?
+    public UserRatingListDTO getUserRatings(Long userId) {
         List<UserRatingData> userRatings = userRepository.getUserRatingsWithEvaluativeNames(userId);
         return new UserRatingListDTO(userRatings);
+    }
+
+    public UserProfileViewDTO getUserProfile(Long userId) {
+        UserData userData = userRepository.getUserStatistics(userId);
+        if(userData == null)
+            throw new EntityNotFoundException(ResponseCode.RESOURCE_NOT_FOUND.name());
+
+        return new UserProfileViewDTO(userData, getUserHistoricEvents(userId));
     }
 
 }
