@@ -64,6 +64,9 @@ public class UserProfileViewDTO {
 }
 
 @Builder
+@Getter
+@RequiredArgsConstructor
+@FieldDefaults(level=AccessLevel.PRIVATE, makeFinal = true)
 class EventDataListElem {
 
     Long id;
