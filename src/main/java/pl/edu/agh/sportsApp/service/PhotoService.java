@@ -68,7 +68,7 @@ public class PhotoService {
     private void addEventPhoto(Event event, MultipartFile file) {
         EventPhoto photo;
         try {
-            photo = photoManager.createEventPhoto(file);
+            photo = photoManager.saveEventPhoto(file);
         } catch (IOException e) {
             throw new PhotoProcessingException(ResponseCode.MEDIA_SERVICE_NOT_AVAILABLE.name());
         }

@@ -63,16 +63,10 @@ public class PhotoManager {
         return Optional.of(new PathResource(photoOpt.get().getHighResolutionPath()));
     }
 
-    private PhotoPaths savePhotoToServerStorage(MultipartFile file) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+    private PhotoPaths savePhotoToServerStorage(BufferedImage originalImage, String photoFormat) throws IOException {
 
-        if (bufferedImage.getWidth() != bufferedImage.getHeight())
-            throw new PhotoProcessingException(ResponseCode.INVALID_IMAGE_PROPORTIONS.name());
-
-        BufferedImage lowerResolutionImg = photoEditor.resize(bufferedImage);
-
+        BufferedImage lowerResolutionImg = photoEditor.resize(originalImage);
         String fileId = nameGenerator.generate();
-        String photoFormat = file.getOriginalFilename().split("\\.")[1];
 
         String highFilePath = uploadsDir + HIGH_QUALITY + fileId + "." + photoFormat;
         String lowFilePath = uploadsDir + LOW_QUALITY + fileId + "." + photoFormat;
@@ -80,21 +74,31 @@ public class PhotoManager {
         File lowDest = new File(lowFilePath);
 
         ImageIO.write(lowerResolutionImg, photoFormat, lowDest);
-        file.transferTo(highDest);
+        ImageIO.write(originalImage, photoFormat, highDest);
 
         return new PhotoPaths(fileId, highFilePath, lowFilePath);
     }
 
+    @SuppressWarnings("all")
     public ProfilePhoto saveProfilePhoto(MultipartFile file) throws IOException {
-        PhotoPaths photoPaths = savePhotoToServerStorage(file);
+        BufferedImage bufferedImage = ImageIO.read(file.getInputStream());
+        if (bufferedImage.getWidth() != bufferedImage.getHeight())
+            throw new PhotoProcessingException(ResponseCode.INVALID_IMAGE_PROPORTIONS.name());
+
+        PhotoPaths photoPaths =
+                savePhotoToServerStorage(bufferedImage, file.getOriginalFilename().split("\\.")[1]);
+
         return new ProfilePhoto(
                 photoPaths.getFileId(),
                 photoPaths.getHighFilePath(),
                 photoPaths.getLowFilePath());
     }
 
-    public EventPhoto createEventPhoto(MultipartFile file) throws IOException {
-        PhotoPaths photoPaths = savePhotoToServerStorage(file);
+    @SuppressWarnings("all")
+    public EventPhoto saveEventPhoto(MultipartFile file) throws IOException {
+        PhotoPaths photoPaths = savePhotoToServerStorage(ImageIO.read(file.getInputStream()),
+                file.getOriginalFilename().split("\\.")[1]);
+
         return new EventPhoto(
                 photoPaths.getFileId(),
                 photoPaths.getHighFilePath(),
