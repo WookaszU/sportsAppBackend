@@ -154,5 +154,4 @@ final class UserController {
         return userService.getUserProfile(userId);
     }
 
-
 }
