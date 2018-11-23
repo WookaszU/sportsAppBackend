@@ -41,17 +41,6 @@ final class AuthController {
         authenticationService.register(registerRequestDTO);
     }
 
-    @ApiOperation(value = "Enable account.", notes = "Triggered by email confirmation link click.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Account enabled."),
-            @ApiResponse(code = 404, message = "Not found.")
-    })
-    @GetMapping("/confirm/{token}")
-    public String registrationConfirm(@PathVariable("token") final String registerToken) {
-        authenticationService.registrationConfirm(registerToken);
-        return "Success - need to make here a page with good looking confirm success info.";
-    }
-
     @ApiOperation(value = "Resend a confirm email.")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Confirm token resent."),
