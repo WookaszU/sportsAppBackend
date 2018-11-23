@@ -44,7 +44,7 @@ public class RegisterService {
                 .ownerId(newUser.getId())
                 .build();
         tokenStorage.saveToken(token);
-        EmailSender.sendRegisterEmail(user.getEmail(), registerToken);
+        EmailSender.sendRegisterEmail(user, registerToken);
     }
 
     public boolean confirm(Token confirmToken) {
@@ -68,7 +68,7 @@ public class RegisterService {
                 .ownerId(prevToken.getOwnerId())
                 .build();
         tokenStorage.saveToken(newToken);
-        EmailSender.sendRegisterEmail(prevToken.getOwner().getEmail(), registerToken);
+        EmailSender.sendRegisterEmail(prevToken.getOwner(), registerToken);
     }
 
 

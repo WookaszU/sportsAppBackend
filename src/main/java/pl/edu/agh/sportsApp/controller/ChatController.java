@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.rest;
+package pl.edu.agh.sportsApp.controller;
 
 import lombok.AccessLevel;
 import lombok.NonNull;
