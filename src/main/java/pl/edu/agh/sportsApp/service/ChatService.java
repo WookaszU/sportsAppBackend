@@ -6,10 +6,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.sportsApp.dateservice.DateService;
 import pl.edu.agh.sportsApp.dto.ChatMessageDTO;
+import pl.edu.agh.sportsApp.dto.ResponseCode;
+import pl.edu.agh.sportsApp.exceptionHandler.exceptions.NoPermissionsException;
 import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.repository.chat.PrivateChatRepository;
+import pl.edu.agh.sportsApp.repository.event.EventRepository;
+import pl.edu.agh.sportsApp.repository.message.MessageRepository;
+import pl.edu.agh.sportsApp.repository.message.projection.ChatMessageData;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,20 +25,35 @@ import pl.edu.agh.sportsApp.model.User;
 public class ChatService {
 
     @NonNull
-    DateService dateService;
+    MessageRepository messageRepository;
     @NonNull
-    ChatMessageStorage messageStorage;
+    EventRepository eventRepository;
+    @NonNull
+    PrivateChatRepository privateChatRepository;
 
     @Async
     public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId, final Long userId){
 
-        Message message = messageStorage.save(Message.builder()
+        Message message = messageRepository.save(Message.builder()
                 .senderId(userId)
-                .conversationId(Long.parseLong(chatId))
+                .chatId(Long.parseLong(chatId))
                 .content(msg.getContent())
-                .creationTime(dateService.now())
+                .creationTime(LocalDateTime.now())
                 .build());
 
         // notifications here todo
     }
+
+    public List<ChatMessageData> getEventChatHistoryViewData(Long eventId, User user) {
+        if(!eventRepository.isUserParticipant(eventId, user.getId()).isPresent())
+            throw new NoPermissionsException(ResponseCode.PERMISSION_DENIED.name());
+        return messageRepository.getEventChatHistoryViewData(eventId);
+    }
+
+    public List<ChatMessageData> getPrivateChatHistoryViewData(Long chatId, User user) {
+        if(!privateChatRepository.isUserParticipant(chatId, user.getId()).isPresent())
+            throw new NoPermissionsException(ResponseCode.PERMISSION_DENIED.name());
+        return messageRepository.getPrivateChatHistoryViewData(chatId);
+    }
+
 }
