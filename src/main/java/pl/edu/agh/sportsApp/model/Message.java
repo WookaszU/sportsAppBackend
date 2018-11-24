@@ -9,7 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity(name = "message")
 @Data
@@ -27,10 +27,10 @@ public class Message {
     private Long senderId;
 
     @Column
-    private Long conversationId;
+    private Long chatId;
 
     @Column
-    private ZonedDateTime creationTime;
+    private LocalDateTime creationTime;
 
     @Column
     private String content;

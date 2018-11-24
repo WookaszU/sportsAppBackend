@@ -9,6 +9,7 @@ import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
 
@@ -34,6 +35,12 @@ public interface EventRepository extends JpaRepository<Event, Long> {
             "LEFT JOIN user_rating UR ON U.id = UR.rated_user_id AND UR.evaluative_user_id = :userId\n" +
             "WHERE UE.event_id = :eventId", nativeQuery = true)
     List<RatingFormElement> getUserRatingFormForEvent(@Param("eventId") Long eventId, @Param("userId") Long userId);
+
+    @Query(value = "SELECT ue.users_id\n" +
+            "FROM event e\n" +
+            "INNER JOIN user_events ue ON e.id = ue.event_id\n" +
+            "WHERE ue.users_id = :userId AND e.id = :eventId", nativeQuery = true)
+    Optional<Long> isUserParticipant(@Param("eventId") Long eventId, @Param("userId") Long userId);
 
     List<Event> getALlByStartDateIsBetween(LocalDateTime startDate, LocalDateTime endDate);
 }
