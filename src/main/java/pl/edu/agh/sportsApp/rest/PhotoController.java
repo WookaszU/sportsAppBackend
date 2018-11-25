@@ -2,9 +2,11 @@ package pl.edu.agh.sportsApp.rest;
 
 import io.swagger.annotations.*;
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @RequestMapping("/files/photo")
 public class PhotoController {
 
+    @NonNull
     PhotoService photoService;
 
     @ApiOperation(value = "Return photo in high resolution.", response = Resource.class)
@@ -30,7 +33,7 @@ public class PhotoController {
             @ApiResponse(code = 404, message = "ResponseCodes = {RESOURCE_NOT_FOUND}"),
     })
     @ResponseBody
-    @GetMapping("/high/{resourceId}")
+    @GetMapping(value = "/high/{resourceId}", produces=MediaType.IMAGE_JPEG_VALUE)
     public Resource serveHighQualityPhoto(@PathVariable String resourceId) {
         return photoService.serveHighQualityPhoto(resourceId);
     }
@@ -42,7 +45,7 @@ public class PhotoController {
             @ApiResponse(code = 404, message = "ResponseCodes = {RESOURCE_NOT_FOUND}"),
     })
     @ResponseBody
-    @GetMapping("/low/{resourceId}")
+    @GetMapping(value="/low/{resourceId}", produces=MediaType.IMAGE_JPEG_VALUE)
     public Resource serveLowQualityPhoto(@PathVariable String resourceId) {
         return photoService.serveLowQualityPhoto(resourceId);
     }

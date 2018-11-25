@@ -43,6 +43,8 @@ class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
             Arrays.asList(
                     new AntPathRequestMatcher("/public/**"),
+                    new AntPathRequestMatcher("/files/photo/low/**"),
+                    new AntPathRequestMatcher("/files/photo/high/**"),
                     new AntPathRequestMatcher("/v2/api-docs"),
                     new AntPathRequestMatcher("/configuration/ui"),
                     new AntPathRequestMatcher("/swagger-resources/**"),
