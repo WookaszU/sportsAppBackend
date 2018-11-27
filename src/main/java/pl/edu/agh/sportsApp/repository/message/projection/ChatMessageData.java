@@ -14,6 +14,6 @@ public interface ChatMessageData {
 
     LocalDateTime getDateTime();
 
-    Long getSenderPhotoId();
+    String getSenderPhotoId();
 
 }
