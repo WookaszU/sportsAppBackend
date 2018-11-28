@@ -9,6 +9,7 @@ import javax.persistence.OneToOne;
 
 @Getter @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "eventChat")
 public class EventChat extends Chat{
 
