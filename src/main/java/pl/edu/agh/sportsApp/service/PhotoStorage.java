@@ -1,6 +1,7 @@
 package pl.edu.agh.sportsApp.service;
 
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,11 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PhotoStorage {
 
+    @NonNull
     ProfilePhotoRepository profilePhotoRepository;
+    @NonNull
     EventPhotoRepository eventPhotoRepository;
+    @NonNull
     PhotoRepository photoRepository;
 
     public ProfilePhoto save(ProfilePhoto photo) {

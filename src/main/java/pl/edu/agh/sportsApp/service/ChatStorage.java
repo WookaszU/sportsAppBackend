@@ -48,12 +48,12 @@ public class ChatStorage {
     }
 
     public void addParticipant(PrivateChat privateChat, User user){
-        privateChat.getParticipants().add(user);
+        privateChat.getParticipants().put(user.getId(), user);
         privateChatRepository.save(privateChat);
     }
 
     public void removeParticipant(PrivateChat privateChat, User user){
-        privateChat.getParticipants().remove(user);
+        privateChat.getParticipants().remove(user.getId());
         privateChatRepository.save(privateChat);
     }
 
