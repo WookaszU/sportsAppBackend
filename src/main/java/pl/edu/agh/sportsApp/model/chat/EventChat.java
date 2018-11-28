@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 @Entity(name = "eventChat")
 public class EventChat extends Chat{
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "eventChat", fetch = FetchType.EAGER)
     private Event event;
 
 }
