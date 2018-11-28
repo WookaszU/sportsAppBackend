@@ -70,8 +70,8 @@ public class Event {
     @MapKeyColumn(name = "id")
     private Map<Long, User> participants = new HashMap<>();
 
-    @OneToOne(mappedBy = "event", fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "chat_id", referencedColumnName = "id", nullable = false)
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "chat_id", referencedColumnName = "id")
     private EventChat eventChat;
 
     @Setter(AccessLevel.PRIVATE)

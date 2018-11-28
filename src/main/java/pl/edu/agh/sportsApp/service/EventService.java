@@ -50,6 +50,7 @@ public class EventService {
         Map<Long, User> participants = new HashMap<>();
         participants.put(owner.getId(), owner);
         newEvent.setParticipants(participants);
+        eventChat.setEvent(newEvent);
         newEvent.setEventChat(eventChat);
         eventRepository.save(newEvent);
     }
