@@ -1,20 +1,15 @@
 package pl.edu.agh.sportsApp.model.chat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
 import pl.edu.agh.sportsApp.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "privateChat")
