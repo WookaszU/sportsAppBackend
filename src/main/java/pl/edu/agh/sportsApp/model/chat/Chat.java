@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import pl.edu.agh.sportsApp.model.Message;
+import pl.edu.agh.sportsApp.model.notification.MessageNotification;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "chat")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Chat {
 
     @Id
@@ -31,5 +33,10 @@ public class Chat {
     )
     @Builder.Default
     private Set<Message> messages = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Builder.Default
+    private Set<MessageNotification> notifications = new HashSet<>();
 
 }
