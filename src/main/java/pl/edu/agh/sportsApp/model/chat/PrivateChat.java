@@ -8,7 +8,10 @@ import org.hibernate.annotations.Cascade;
 import pl.edu.agh.sportsApp.model.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
@@ -17,14 +20,17 @@ import java.util.Set;
 @Entity(name = "privateChat")
 public class PrivateChat extends Chat {
 
+    private LocalDateTime creationTime;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @JoinTable(
-            name = "UserChats",
-            joinColumns = {@JoinColumn(name = "chat_id")},
+            name = "UserPrivateChat",
+            joinColumns = {@JoinColumn(name = "private_chat_id")},
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     @Builder.Default
-    private Set<User> participants = new HashSet<>();
+    @MapKeyColumn(name = "id")
+    private Map<Long, User> participants = new HashMap<>();
 
 }
