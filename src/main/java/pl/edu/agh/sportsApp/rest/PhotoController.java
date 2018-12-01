@@ -84,7 +84,7 @@ public class PhotoController {
             @ApiResponse(code = 404, message = "ResponseCodes = {RESOURCE_NOT_FOUND}"),
     })
     @ResponseBody
-    @GetMapping("/avatar/current")
+    @GetMapping(value="/avatar/current", produces=MediaType.IMAGE_JPEG_VALUE)
     public Resource serveUserPhoto(@ApiIgnore @AuthenticationPrincipal User user) {
         return photoService.serveUserPhoto(user);
     }
@@ -116,7 +116,8 @@ public class PhotoController {
         photoService.removeEventPhoto(eventId, photoId);
     }
 
-    @ApiOperation(value = "Returns list of photoIds connected to given event.", response = EventPhotosIdsRequestDTO.class)
+    @ApiOperation(value = "Returns list of photoIds connected to given event.",
+            response = EventPhotosIdsRequestDTO.class)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Photos list returned."),
             @ApiResponse(code = 401, message = "Log first to gain access."),
