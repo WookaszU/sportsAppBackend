@@ -7,16 +7,14 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectEvent;
 
-import java.security.Principal;
-
 @Component
 public class ConnectEvent implements ApplicationListener<SessionConnectEvent> {
 
     private static final Logger logger = LoggerFactory.getLogger(ConnectEvent.class);
 
+    @SuppressWarnings("all")
     public void onApplicationEvent(SessionConnectEvent event) {
         StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
-        Principal user = event.getUser();
         logger.info("New socket connection.");
     }
 

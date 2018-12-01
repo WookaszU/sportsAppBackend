@@ -9,7 +9,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.edu.agh.sportsApp.dto.ChatMessageDTO;
+import pl.edu.agh.sportsApp.dto.socket.ChatMessageDTO;
 import pl.edu.agh.sportsApp.service.ChatService;
 import pl.edu.agh.sportsApp.websocket.principal.SocketPrincipal;
 import springfox.documentation.annotations.ApiIgnore;
