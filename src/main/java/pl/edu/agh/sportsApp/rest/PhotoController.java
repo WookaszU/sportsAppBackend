@@ -84,7 +84,7 @@ public class PhotoController {
             @ApiResponse(code = 404, message = "ResponseCodes = {RESOURCE_NOT_FOUND}"),
     })
     @ResponseBody
-    @GetMapping(value="/avatar/current", produces=MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value="/avatar/current")
     public Resource serveUserPhoto(@ApiIgnore @AuthenticationPrincipal User user) {
         return photoService.serveUserPhoto(user);
     }
