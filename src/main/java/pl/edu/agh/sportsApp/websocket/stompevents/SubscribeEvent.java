@@ -22,7 +22,7 @@ public class SubscribeEvent implements ApplicationListener<SessionSubscribeEvent
     @SuppressWarnings("all")
     public void onApplicationEvent(SessionSubscribeEvent event) {
         StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
-        if(sha.getHeader("simpDestination").equals("/user/queue/reply"))
+        if(sha.getHeader("simpDestination").equals("/user/queue/reply") && event.getUser() != null)
             appEventHandler.handleUserLoginEvent(((SocketPrincipal) event.getUser()).getId());
     }
 
