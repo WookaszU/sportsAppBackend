@@ -1,4 +1,4 @@
-package pl.edu.agh.sportsApp.dto;
+package pl.edu.agh.sportsApp.dto.socket;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -15,8 +15,5 @@ public class ChatMessageDTO {
 
     @NotNull
     String content;
-
-    @NotNull
-    String type;
 
 }

@@ -30,7 +30,7 @@ public class TestController {
             @ApiResponse(code = 409, message = "Error during truncating tables.")
     })
     @DeleteMapping("/db/kill")
-    public void serveHighQualityPhoto() {
+    public void cleanDbToStartupState() {
         appStartupTasks.runDatabaseScripts("clearDB.sql");
     }
 

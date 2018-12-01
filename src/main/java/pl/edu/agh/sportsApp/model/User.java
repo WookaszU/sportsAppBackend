@@ -8,16 +8,14 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import pl.edu.agh.sportsApp.dto.UserDTO;
+import pl.edu.agh.sportsApp.model.notification.Notification;
 import pl.edu.agh.sportsApp.model.photo.Photo;
 import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -85,6 +83,9 @@ public class User implements UserDetails {
     @Builder.Default
     private Set<Event> events = new HashSet<>();
 
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "relatedUsers")
+    private Set<Notification> notifications = new HashSet<>();
+
     public void setPhoto(ProfilePhoto photo) {
         photo.setUser(this);
         this.setUserPhoto(photo);
@@ -100,6 +101,14 @@ public class User implements UserDetails {
 
     public void removeUserRating(UserRating userRating) {
         userRatings.remove(userRating);
+    }
+
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
+    }
+
+    public void deleteNotification(Notification notification) {
+        notifications.remove(notification);
     }
 
     public UserDTO mapToDTO() {

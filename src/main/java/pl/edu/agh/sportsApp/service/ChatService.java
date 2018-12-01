@@ -6,11 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.sportsApp.dto.ChatMessageDTO;
+import pl.edu.agh.sportsApp.dto.socket.ChatMessageDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.NoPermissionsException;
 import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.notifications.AppEventHandler;
 import pl.edu.agh.sportsApp.repository.chat.PrivateChatRepository;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.message.MessageRepository;
@@ -30,6 +31,8 @@ public class ChatService {
     EventRepository eventRepository;
     @NonNull
     PrivateChatRepository privateChatRepository;
+    @NonNull
+    AppEventHandler appEventHandler;
 
     @Async
     public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId, final Long userId){
@@ -41,7 +44,7 @@ public class ChatService {
                 .creationTime(LocalDateTime.now())
                 .build());
 
-        // notifications here todo
+        appEventHandler.handleEventChatMessageEvent(message);
     }
 
     public List<ChatMessageData> getEventChatHistoryViewData(Long eventId, User user) {

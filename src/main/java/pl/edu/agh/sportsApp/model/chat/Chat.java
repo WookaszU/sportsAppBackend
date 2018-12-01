@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
 import pl.edu.agh.sportsApp.model.Message;
-import pl.edu.agh.sportsApp.model.notification.MessageNotification;
+import pl.edu.agh.sportsApp.model.notification.Notification;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -35,8 +35,15 @@ public class Chat {
     private Set<Message> messages = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @Builder.Default
-    private Set<MessageNotification> notifications = new HashSet<>();
+    private Set<Notification> notifications = new HashSet<>();
+
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
+    }
+
+    public void removeNotification(Notification notification) {
+        notifications.remove(notification);
+    }
 
 }
