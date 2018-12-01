@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.socket.ChatMessageDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.NoPermissionsException;
@@ -35,6 +36,7 @@ public class ChatService {
     AppEventHandler appEventHandler;
 
     @Async
+    @Transactional
     public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId, final Long userId){
 
         Message message = messageRepository.save(Message.builder()
