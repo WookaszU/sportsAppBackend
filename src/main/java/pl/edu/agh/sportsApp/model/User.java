@@ -83,7 +83,7 @@ public class User implements UserDetails {
     @Builder.Default
     private Set<Event> events = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "relatedUsers")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "relatedUsers")
     private Set<Notification> notifications = new HashSet<>();
 
     public void setPhoto(ProfilePhoto photo) {
