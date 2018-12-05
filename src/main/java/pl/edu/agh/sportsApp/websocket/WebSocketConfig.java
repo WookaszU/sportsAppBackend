@@ -53,7 +53,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureWebSocketTransport(WebSocketTransportRegistration registration) {
         // sending messages from server timeout set to 3 seconds
-        registration.setSendTimeLimit(3000);
+        registration.setSendTimeLimit(120000);
     }
 
     public class MyHandshakeHandler extends DefaultHandshakeHandler {
