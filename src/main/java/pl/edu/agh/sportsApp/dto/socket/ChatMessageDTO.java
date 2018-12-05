@@ -11,9 +11,6 @@ import javax.validation.constraints.NotNull;
 public class ChatMessageDTO {
 
     @NotNull
-    Long senderId;
-
-    @NotNull
     String content;
 
 }
