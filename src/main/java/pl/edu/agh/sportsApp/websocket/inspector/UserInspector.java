@@ -32,7 +32,7 @@ public class UserInspector implements UserRightsInspector {
         if(path.length == 3 || path[1].equals("topic")) {
             Optional<Event> eventOpt = eventService.findEventById(Long.parseLong(path[2]));
             return eventOpt.isPresent() &&
-                    eventOpt.get().getParticipantIds().contains(((SocketPrincipal) principal).getId());
+                    eventOpt.get().getParticipants().keySet().contains(((SocketPrincipal) principal).getId());
         }
 
         return false;   // wrong path
@@ -42,10 +42,10 @@ public class UserInspector implements UserRightsInspector {
         String[] path = messageDestination.split("/");
 
         //  /app/chat/{chatId}
-        if(messageDestination.startsWith("/app/chat/") && path.length != 4) {
-            Optional<Event> eventOpt = eventService.findEventById(Long.parseLong(path[2]));
+        if(messageDestination.startsWith("/app/chat/") && path.length == 4) {
+            Optional<Event> eventOpt = eventService.findEventById(Long.parseLong(path[3]));
             return eventOpt.isPresent() &&
-                    eventOpt.get().getParticipantIds().contains(((SocketPrincipal) principal).getId());
+                    eventOpt.get().getParticipants().keySet().contains(((SocketPrincipal) principal).getId());
         }
 
         return false;   // wrong path

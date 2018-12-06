@@ -16,6 +16,7 @@ import pl.edu.agh.sportsApp.repository.chat.EventChatRepository;
 import pl.edu.agh.sportsApp.repository.chat.PrivateChatRepository;
 import pl.edu.agh.sportsApp.repository.notification.NotificationRepository;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Component
@@ -31,16 +32,16 @@ public class SocketNotificationCreator {
     NotificationRepository notificationRepository;
 
     @Transactional
-    public Notification newEventChatMessage(Message newMessage) {
-        EventChat chat = eventChatRepository.getOne(newMessage.getChatId());
+    public Notification newEventChatMessage(Long chatId, Long userId, LocalDateTime dateTime) {
+        EventChat chat = eventChatRepository.getOne(chatId);
 
         MessageNotification notification = MessageNotification.builder()
                 .chat(chat)
-                .dateTime(newMessage.getCreationTime())
+                .dateTime(dateTime)
                 .build();
 
         for(User user: chat.getEvent().getParticipants().values())
-            if(!user.getId().equals(newMessage.getSenderId())) {
+            if(!user.getId().equals(userId)) {
                 notification.addRelatedUser(user);
                 user.addNotification(notification);
             }

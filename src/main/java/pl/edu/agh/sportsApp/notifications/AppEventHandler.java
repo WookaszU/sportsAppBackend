@@ -11,6 +11,8 @@ import pl.edu.agh.sportsApp.notifications.creators.RestNotificationCreator;
 import pl.edu.agh.sportsApp.notifications.creators.SocketNotificationCreator;
 import pl.edu.agh.sportsApp.notifications.manager.NotificationManager;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE, makeFinal = true)
@@ -24,8 +26,8 @@ public class AppEventHandler {
     NotificationManager notificationManager;
 
     @Transactional
-    public void handleEventChatMessageEvent(Message message) {
-        notificationManager.manage(socketNotificationCreator.newEventChatMessage(message));
+    public void handleEventChatMessageEvent(Long chatId, Long userId, LocalDateTime dateTime) {
+        notificationManager.manage(socketNotificationCreator.newEventChatMessage(chatId, userId, dateTime));
     }
 
     @Transactional

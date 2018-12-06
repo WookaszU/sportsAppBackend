@@ -69,7 +69,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 return null;
 
             User user = userOpt.get();
-            return new SocketPrincipal(user.getId().toString(), user.getId());
+
+            return SocketPrincipal.builder()
+                    .id(user.getId())
+                    .idAsString(Long.toString(user.getId()))
+                    .firstName(user.getFirstName())
+                    .lastName(user.getLastName())
+                    .photoId(user.getUserPhoto() != null ? user.getUserPhoto().getPhotoId() : "0")
+                    .build();
         }
     }
 

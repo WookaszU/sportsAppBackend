@@ -37,16 +37,17 @@ public class ChatService {
 
     @Async
     @Transactional
-    public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId, final Long userId){
+    public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId,
+                                        LocalDateTime localDateTime, final Long userId){
 
         Message message = messageRepository.save(Message.builder()
                 .senderId(userId)
                 .chatId(Long.parseLong(chatId))
                 .content(msg.getContent())
-                .creationTime(LocalDateTime.now())
+                .creationTime(localDateTime)
                 .build());
 
-        appEventHandler.handleEventChatMessageEvent(message);
+        appEventHandler.handleEventChatMessageEvent(Long.parseLong(chatId), userId, localDateTime);
     }
 
     public List<ChatMessageData> getEventChatHistoryViewData(Long eventId, User user) {

@@ -23,18 +23,18 @@ public class SocketActionsInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(message);
 
-//        if(headerAccessor.getUser() == null)
-//            return null;
-//
-//        if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
-//            if (!rightsInspector.hasUserSubscriptionRights(headerAccessor.getUser(), headerAccessor.getDestination())) {
-//                return null;
-//            }
-//        } else if (StompCommand.SEND.equals(headerAccessor.getCommand())) {
-//            if (!rightsInspector.hasUserMessagingRights(headerAccessor.getUser(), headerAccessor.getDestination())) {
-//                return null;
-//            }
-//        }
+        if(headerAccessor.getUser() == null)
+            return null;
+
+        if (StompCommand.SUBSCRIBE.equals(headerAccessor.getCommand())) {
+            if (!rightsInspector.hasUserSubscriptionRights(headerAccessor.getUser(), headerAccessor.getDestination())) {
+                return null;
+            }
+        } else if (StompCommand.SEND.equals(headerAccessor.getCommand())) {
+            if (!rightsInspector.hasUserMessagingRights(headerAccessor.getUser(), headerAccessor.getDestination())) {
+                return null;
+            }
+        }
 
         return message;
     }

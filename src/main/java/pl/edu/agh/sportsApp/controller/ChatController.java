@@ -10,11 +10,13 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.edu.agh.sportsApp.dto.socket.ChatMessageDTO;
+import pl.edu.agh.sportsApp.dto.socket.ChatMessageDataDTO;
 import pl.edu.agh.sportsApp.service.ChatService;
 import pl.edu.agh.sportsApp.websocket.principal.SocketPrincipal;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 
 @ApiIgnore
 @Controller
@@ -27,11 +29,21 @@ public class ChatController {
 
     @MessageMapping("/chat/{chatId}")
     @SendTo("/topic/{chatId}")
-    public ChatMessageDTO postMessage(@Valid final ChatMessageDTO msg,
+    public ChatMessageDataDTO postMessage(@Valid final ChatMessageDTO msg,
                                       @DestinationVariable final String chatId,
                                       SocketPrincipal socketPrincipal) {
-        chatService.handleMessageAsyncTasks(msg, chatId, socketPrincipal.getId());
-        return msg;
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        chatService.handleMessageAsyncTasks(msg, chatId, localDateTime, socketPrincipal.getId());
+
+        return ChatMessageDataDTO.builder()
+                .content(msg.getContent())
+                .dateTime(localDateTime)
+                .firstName(socketPrincipal.getFirstName())
+                .lastName(socketPrincipal.getLastName())
+                .senderId(socketPrincipal.getId())
+                .senderPhotoId(socketPrincipal.getPhotoId())
+                .build();
     }
 
     @RequestMapping("/public")
