@@ -25,12 +25,6 @@ public class Chat {
     private Long id;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @JoinTable(
-            name = "ChatMessages",
-            joinColumns = {@JoinColumn(name = "chat_id")},
-            inverseJoinColumns = {@JoinColumn(name = "message_id")}
-    )
     @Builder.Default
     private Set<Message> messages = new HashSet<>();
 
@@ -44,6 +38,14 @@ public class Chat {
 
     public void removeNotification(Notification notification) {
         notifications.remove(notification);
+    }
+
+    public void addMessage(Message message) {
+        messages.add(message);
+    }
+
+    public void removeMessage(Message message) {
+        messages.remove(message);
     }
 
 }

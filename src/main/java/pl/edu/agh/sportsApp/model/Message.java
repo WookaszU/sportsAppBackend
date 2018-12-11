@@ -1,14 +1,9 @@
 package pl.edu.agh.sportsApp.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import pl.edu.agh.sportsApp.model.chat.Chat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity(name = "message")
@@ -16,6 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"chat"})
 public class Message {
 
     @Column
@@ -26,8 +22,9 @@ public class Message {
     @Column
     private Long senderId;
 
-    @Column
-    private Long chatId;
+    @ManyToOne
+    @JoinColumn(name = "chatId", referencedColumnName = "id")
+    private Chat chat;
 
     @Column
     private LocalDateTime creationTime;
