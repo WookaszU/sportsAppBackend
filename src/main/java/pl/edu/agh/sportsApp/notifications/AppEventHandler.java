@@ -31,8 +31,8 @@ public class AppEventHandler {
     }
 
     @Transactional
-    public void handlePrivateChatMessageEvent(Message message) {
-        notificationManager.manage(socketNotificationCreator.newPrivateChatMessage(message));
+    public void handlePrivateChatMessageEvent(Long chatId, Long userId, LocalDateTime dateTime) {
+        notificationManager.manage(socketNotificationCreator.newPrivateChatMessage(chatId, userId, dateTime));
     }
 
     public void handleUserLoginEvent(Long userId) {

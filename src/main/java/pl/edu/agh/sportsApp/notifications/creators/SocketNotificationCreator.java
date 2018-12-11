@@ -28,8 +28,6 @@ public class SocketNotificationCreator {
     EventChatRepository eventChatRepository;
     @NonNull
     PrivateChatRepository privateChatRepository;
-    @NonNull
-    NotificationRepository notificationRepository;
 
     @Transactional
     public Notification newEventChatMessage(Long chatId, Long userId, LocalDateTime dateTime) {
@@ -51,19 +49,19 @@ public class SocketNotificationCreator {
     }
 
     @Transactional
-    public Notification newPrivateChatMessage(Message newMessage) {
+    public Notification newPrivateChatMessage(Long chatId, Long userId, LocalDateTime dateTime) {
 
-        PrivateChat chat = privateChatRepository.getOne(newMessage.getChatId());
+        PrivateChat chat = privateChatRepository.getOne(chatId);
         Map<Long, User> relatedUsers = chat.getParticipants();
-        relatedUsers.remove(newMessage.getSenderId());
+        relatedUsers.remove(userId);
 
         Notification notification = MessageNotification.builder()
                 .chat(chat)
-                .dateTime(newMessage.getCreationTime())
+                .dateTime(dateTime)
                 .build();
 
         for(User user: chat.getParticipants().values())
-            if(!user.getId().equals(newMessage.getSenderId())) {
+            if(!user.getId().equals(userId)) {
                 notification.addRelatedUser(user);
                 user.addNotification(notification);
             }

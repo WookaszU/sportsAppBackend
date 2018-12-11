@@ -30,8 +30,8 @@ public class ChatController {
     @MessageMapping("/chat/{chatId}")
     @SendTo("/topic/{chatId}")
     public ChatMessageDataDTO postMessage(@Valid final ChatMessageDTO msg,
-                                      @DestinationVariable final String chatId,
-                                      SocketPrincipal socketPrincipal) {
+                                          @DestinationVariable final String chatId,
+                                          SocketPrincipal socketPrincipal) {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         chatService.handleMessageAsyncTasks(msg, chatId, localDateTime, socketPrincipal.getId());
