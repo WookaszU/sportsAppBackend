@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.chat.PrivateChat;
@@ -14,7 +13,6 @@ import pl.edu.agh.sportsApp.model.notification.MessageNotification;
 import pl.edu.agh.sportsApp.model.notification.Notification;
 import pl.edu.agh.sportsApp.repository.chat.EventChatRepository;
 import pl.edu.agh.sportsApp.repository.chat.PrivateChatRepository;
-import pl.edu.agh.sportsApp.repository.notification.NotificationRepository;
 
 import java.time.LocalDateTime;
 import java.util.Map;

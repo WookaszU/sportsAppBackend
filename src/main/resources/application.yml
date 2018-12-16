@@ -16,4 +16,15 @@ password:
 replyTo:
 setFrom:
 appURL:
-mediaStorageURL:
+mediaStorageURL: files\avatars\
+
+---
+
+spring:
+  profiles: test
+login:
+password:
+replyTo:
+setFrom:
+appURL:
+mediaStorageURL: files\test\

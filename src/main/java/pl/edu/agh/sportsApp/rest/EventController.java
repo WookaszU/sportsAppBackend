@@ -45,9 +45,9 @@ public class EventController {
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createEvent(@Valid @RequestBody EventRequestDTO eventRequestDTO,
+    public EventDTO createEvent(@Valid @RequestBody EventRequestDTO eventRequestDTO,
                             @ApiIgnore @AuthenticationPrincipal final User user) {
-        eventService.createEvent(eventRequestDTO, user);
+        return eventService.createEvent(eventRequestDTO, user);
     }
 
     @ApiOperation(value = "Join event with given id.")

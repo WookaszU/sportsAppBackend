@@ -17,7 +17,10 @@ import pl.edu.agh.sportsApp.notifications.manager.updater.INotificationUpdater;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
 import pl.edu.agh.sportsApp.useractivity.UserActivity;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor

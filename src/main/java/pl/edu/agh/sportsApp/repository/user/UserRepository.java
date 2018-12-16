@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import pl.edu.agh.sportsApp.model.User;
-import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
 import pl.edu.agh.sportsApp.repository.user.projection.UserData;
+import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
 
 import java.util.List;
 

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.model.notification.Notification;
 

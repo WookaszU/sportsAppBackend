@@ -33,7 +33,6 @@ public class UserDTO {
     @NotNull
     private String lastName;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private String photoId;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)

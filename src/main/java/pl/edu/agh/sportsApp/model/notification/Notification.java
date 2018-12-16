@@ -1,10 +1,13 @@
 package pl.edu.agh.sportsApp.model.notification;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Cascade;
+import pl.edu.agh.sportsApp.dto.socket.MessageNotificationDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.notifications.EventType;
-import pl.edu.agh.sportsApp.dto.socket.MessageNotificationDTO;
 import pl.edu.agh.sportsApp.websocket.sender.message.SocketMessage;
 
 import javax.persistence.*;

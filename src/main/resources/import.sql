@@ -5,5 +5,7 @@ BEGIN;
 -- users
 INSERT INTO users(email, enabled, first_name, last_name, password, rating) VALUES ('test@test.com',true, 'Tomasz','Nowak','$2a$04$LUCZ9Co/YSdhrG.nXs2pZO.R1FgkE21xz6VDWbsEPeKI7ehqTMlsS', '0');
 INSERT INTO users(email, enabled, first_name, last_name, password, rating) VALUES ('test2@test.com',true, 'Anna','Kowal','$2a$04$LUCZ9Co/YSdhrG.nXs2pZO.R1FgkE21xz6VDWbsEPeKI7ehqTMlsS', '0');
+INSERT INTO users(email, enabled, first_name, last_name, password, rating) VALUES ('test3@test.com',true, 'Jan','Wiśniewski','$2a$04$LUCZ9Co/YSdhrG.nXs2pZO.R1FgkE21xz6VDWbsEPeKI7ehqTMlsS', '0');
+INSERT INTO users(email, enabled, first_name, last_name, password, rating) VALUES ('test4@test.com',false, 'Anna','Wójcik','$2a$04$LUCZ9Co/YSdhrG.nXs2pZO.R1FgkE21xz6VDWbsEPeKI7ehqTMlsS', '0');
 
 COMMIT;

@@ -3,9 +3,9 @@ package pl.edu.agh.sportsApp.model.notification;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import pl.edu.agh.sportsApp.dto.socket.MessageNotificationDTO;
 import pl.edu.agh.sportsApp.model.chat.Chat;
 import pl.edu.agh.sportsApp.notifications.EventType;
-import pl.edu.agh.sportsApp.dto.socket.MessageNotificationDTO;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

@@ -16,7 +16,6 @@ import pl.edu.agh.sportsApp.dto.UserProfileViewDTO;
 import pl.edu.agh.sportsApp.dto.UserRatingListDTO;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
-import pl.edu.agh.sportsApp.repository.user.projection.UserData;
 import pl.edu.agh.sportsApp.service.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 

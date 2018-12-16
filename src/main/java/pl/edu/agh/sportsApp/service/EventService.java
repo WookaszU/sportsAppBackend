@@ -10,8 +10,8 @@ import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.NoPermissionsException;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.ValidationException;
 import pl.edu.agh.sportsApp.model.Event;
-import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.User;
+import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.photo.EventPhoto;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.event.projection.RatingFormElement;
@@ -39,7 +39,7 @@ public class EventService {
         this.chatStorage = chatStorage;
     }
 
-    public void createEvent(EventRequestDTO eventRequestDTO, User owner) {
+    public EventDTO createEvent(EventRequestDTO eventRequestDTO, User owner) {
         LocalDateTime currentDate = LocalDateTime.now();
         if (eventRequestDTO.getStartDate().isBefore(currentDate) || eventRequestDTO.getStartDate().isAfter(currentDate.plusMonths(1)))
             throw new ValidationException(METHOD_ARGS_NOT_VALID.name());
@@ -52,7 +52,8 @@ public class EventService {
         newEvent.setParticipants(participants);
         eventChat.setEvent(newEvent);
         newEvent.setEventChat(eventChat);
-        eventRepository.save(newEvent);
+        Event event = eventRepository.save(newEvent);
+        return event.mapToDTO();
     }
 
     public void addParticipant(Long eventId, Long participantId) {
@@ -97,7 +98,7 @@ public class EventService {
     @Transactional
     public void deleteEvent(Long eventID, Long ownerId) {
         Event event = eventRepository.getOne(eventID);
-        if (!event.getId().equals(ownerId))
+        if (!event.getOwnerId().equals(ownerId))
             throw new AccessDeniedException(ResponseCode.ACCESS_DENIED.name());
         else
             eventRepository.deleteById(eventID);
@@ -128,8 +129,8 @@ public class EventService {
     public List<RatingFormElement> getUserRatingFormForEvent(Long eventId, Long userId) {
         List<RatingFormElement> ratingFormElements = eventRepository.getUserRatingFormForEvent(eventId, userId);
 
-        for(RatingFormElement formElement: ratingFormElements)
-            if(formElement.getUserId().equals(userId)) {
+        for (RatingFormElement formElement : ratingFormElements)
+            if (formElement.getUserId().equals(userId)) {
                 ratingFormElements.remove(formElement);
                 return ratingFormElements;
             }

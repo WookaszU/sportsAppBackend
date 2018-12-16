@@ -1,6 +1,9 @@
 package pl.edu.agh.sportsApp.model.chat;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import pl.edu.agh.sportsApp.model.Event;
 
 import javax.persistence.Entity;

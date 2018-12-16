@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.notifications.creators.RestNotificationCreator;
 import pl.edu.agh.sportsApp.notifications.creators.SocketNotificationCreator;
 import pl.edu.agh.sportsApp.notifications.manager.NotificationManager;

@@ -15,8 +15,8 @@ import pl.edu.agh.sportsApp.model.photo.ProfilePhoto;
 import pl.edu.agh.sportsApp.repository.event.EventRepository;
 import pl.edu.agh.sportsApp.repository.event.projection.EventData;
 import pl.edu.agh.sportsApp.repository.user.UserRepository;
-import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
 import pl.edu.agh.sportsApp.repository.user.projection.UserData;
+import pl.edu.agh.sportsApp.repository.user.projection.UserRatingData;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
