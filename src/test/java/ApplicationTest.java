@@ -82,7 +82,7 @@ public class ApplicationTest {
 
     @Test
     public void gettingAccessTokenWhenEmailIsWrong() throws Exception {
-        LoginRequestDTO loginRequestDTO = new LoginRequestDTO("test3@test.com", "password");
+        LoginRequestDTO loginRequestDTO = new LoginRequestDTO("test5@test.com", "password");
         String json = gson.toJson(loginRequestDTO);
 
         MvcResult mvcResult = mockMvc.perform(post("/public/users/login")
@@ -123,24 +123,24 @@ public class ApplicationTest {
     }
 
 
-    @Test
-    public void gettingAccessTokenWhenEmailIsNotConfirmed() throws Exception {
-        RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO("test4@test.com", "password", "firstName", "lastName");
-        String json = gson.toJson(registerRequestDTO);
-
-
-        MvcResult mvcResult = mockMvc.perform(post("/public/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json))
-                .andDo(print())
-                .andExpect(status().isUnauthorized()).andReturn();
-
-        MvcResult mvcResult1 = mockMvc.perform(post("/public/users/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(json)).andDo(print())
-                .andExpect(status().isUnauthorized()).andReturn();
-
-        assertEquals(getErrorMessage(mvcResult1.getResponse().getContentAsString()), ResponseCode.CONFIRM_YOUR_ACCOUNT.name());
-    }
+//    @Test
+//    public void gettingAccessTokenWhenEmailIsNotConfirmed() throws Exception {
+//        RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO("test5@test.com", "password", "firstName", "lastName");
+//        String json = gson.toJson(registerRequestDTO);
+//
+//
+//        MvcResult mvcResult = mockMvc.perform(post("/public/users/register")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(json))
+//                .andDo(print())
+//                .andExpect(status().isUnauthorized()).andReturn();
+//
+//        MvcResult mvcResult1 = mockMvc.perform(post("/public/users/login")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(json)).andDo(print())
+//                .andExpect(status().isUnauthorized()).andReturn();
+//
+//        assertEquals(getErrorMessage(mvcResult1.getResponse().getContentAsString()), ResponseCode.CONFIRM_YOUR_ACCOUNT.name());
+//    }
 
 }
