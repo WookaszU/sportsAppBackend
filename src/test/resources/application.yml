@@ -1,0 +1,30 @@
+spring:
+  profiles: prod
+login: ${ENV_EMAIL}
+password: ${ENV_EMAIL_PASS}
+replyTo: ${ENV_REPLY_TO}
+setFrom: ${ENV_SEND_FROM}
+appURL: ${ENV_APP_URL}
+mediaStorageURL: ${ENV_MEDIA_URL}
+
+---
+
+spring:
+  profiles: dev
+login:
+password:
+replyTo:
+setFrom:
+appURL:
+mediaStorageURL: C:\Users\Krzysiek\Desktop\Nowy\sportsAppBackend\files\avatars\
+
+---
+
+spring:
+  profiles: test
+login:
+password:
+replyTo:
+setFrom:
+appURL:
+mediaStorageURL: files\test\
