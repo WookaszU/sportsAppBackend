@@ -130,7 +130,8 @@ public class EventController {
     }
 
     @ApiOperation(value = "Get data required to create participants rating form view on frontend.",
-            notes = "If user on list was not rated before then his rating value will be null.")
+            notes = "If user on list was not rated before then his rating value will be null.",
+            response = RatingFormElement.class, responseContainer = "List")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Returned successfully."),
             @ApiResponse(code = 400, message = "Wrong argument type."),
