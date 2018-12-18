@@ -28,6 +28,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.reflect.Type;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -109,7 +110,8 @@ public class PhotoTest {
     @Test
     public void uploadUserAvatar() throws Exception {
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         String token = getAccessToken("test@test.com", "password");
 
@@ -148,7 +150,8 @@ public class PhotoTest {
     @Test
     public void gettingUserAvatar() throws Exception {
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         String token = getAccessToken("test@test.com", "password");
 
@@ -176,7 +179,8 @@ public class PhotoTest {
         mapper.registerModule(new JSR310Module());
 
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         String token = getAccessToken("test@test.com", "password");
 
@@ -218,7 +222,8 @@ public class PhotoTest {
     @Test
     public void gettingHighQualityAvatar() throws Exception {
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         String token = getAccessToken("test@test.com", "password");
 
@@ -253,7 +258,8 @@ public class PhotoTest {
     @Test
     public void gettingLowQualityAvatar() throws Exception {
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         String token = getAccessToken("test@test.com", "password");
 
@@ -313,7 +319,8 @@ public class PhotoTest {
         EventDTO returnedEventDTO = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), EventDTO.class);
 
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         FileInputStream fi1 = new FileInputStream(f);
         MockMultipartFile fstmp = new MockMultipartFile("file", f.getName(), "image/jpeg", fi1);
@@ -336,7 +343,7 @@ public class PhotoTest {
 
 
     @Test
-    public void removingPhotoToEvent() throws Exception {
+    public void removingPhotoFromEvent() throws Exception {
         EventDTO eventDTO = EventDTO.builder()
                 .categoryId(0)
                 .latitude(100.0)
@@ -363,7 +370,8 @@ public class PhotoTest {
         EventDTO returnedEventDTO = mapper.readValue(mvcResult.getResponse().getContentAsByteArray(), EventDTO.class);
 
         ClassLoader cl = getClass().getClassLoader();
-        File f = new File(Objects.requireNonNull(cl.getResource("./egg.jpg")).getFile());
+        URI uri = new URI(Objects.requireNonNull(cl.getResource("./egg.jpg")).getPath());
+        File f = new File(uri.getPath());
 
         FileInputStream fi1 = new FileInputStream(f);
         MockMultipartFile fstmp = new MockMultipartFile("file", f.getName(), "image/jpeg", fi1);
