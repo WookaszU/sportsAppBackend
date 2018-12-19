@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity(name = "userRating")
 @Data
-@EqualsAndHashCode(exclude = "rating")
+@EqualsAndHashCode(exclude = {"rating", "ratedUser", "event"})
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

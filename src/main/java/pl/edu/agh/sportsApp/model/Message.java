@@ -1,6 +1,8 @@
 package pl.edu.agh.sportsApp.model;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import pl.edu.agh.sportsApp.model.chat.Chat;
 
 import javax.persistence.*;
@@ -24,6 +26,7 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "chatId", referencedColumnName = "id")
+    @Cascade(CascadeType.SAVE_UPDATE)
     private Chat chat;
 
     @Column

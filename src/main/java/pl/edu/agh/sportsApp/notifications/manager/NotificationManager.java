@@ -7,7 +7,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.notification.MessageNotification;
 import pl.edu.agh.sportsApp.model.notification.Notification;
@@ -42,9 +41,9 @@ public class NotificationManager {
         notificationSender.sendNotificationToUsers(activeUsersIds, notification);
     }
 
-    @Transactional
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     public void sendNotificationsToJoiningUser(Long userId) {
-        User user  = userRepository.getOne(userId);
+        User user  = userRepository.findById(userId).get();
 
         Set<Notification> userNotifications = user.getNotifications();
         removeUserFromNotifications(userNotifications, userId);
@@ -52,7 +51,6 @@ public class NotificationManager {
         notificationSender.sendStoredNotificationsToUser(userId, groupNotifications(userNotifications));
         notificationUpdater.updateNotificationsDb(userNotifications);
     }
-
 
     private void removeUserFromNotifications(Set<Notification> notifications, Long userId) {
         for(Notification notification: notifications)

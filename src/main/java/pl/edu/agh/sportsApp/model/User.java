@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Entity
 @Table(name = "Users")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EqualsAndHashCode(exclude = {"id", "userPhoto", "tokenIds", "tokens", "eventIds", "events", "userRatings"})
+@EqualsAndHashCode(exclude = {"id", "userPhoto", "tokenIds", "tokens", "eventIds", "events", "userRatings", "rating"})
 @Getter
 @Setter
 @Builder

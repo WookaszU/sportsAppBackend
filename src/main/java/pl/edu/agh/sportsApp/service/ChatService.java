@@ -4,11 +4,8 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.sportsApp.dto.socket.ChatMessageDTO;
 import pl.edu.agh.sportsApp.dto.ResponseCode;
 import pl.edu.agh.sportsApp.exceptionHandler.exceptions.NoPermissionsException;
@@ -41,13 +38,9 @@ public class ChatService {
     @NonNull
     AppEventHandler appEventHandler;
 
-    static Logger logger = LoggerFactory.getLogger(ChatService.class);
-
     @Async
-    @Transactional
     public void handleMessageAsyncTasks(final ChatMessageDTO msg, final String chatId,
                                         final LocalDateTime localDateTime, final Long userId){
-        logger.info("Started handling message in second thread.");
         saveMessage(msg, chatId, localDateTime, userId);
         appEventHandler.handleEventChatMessageEvent(Long.parseLong(chatId), userId, localDateTime);
     }
@@ -64,10 +57,9 @@ public class ChatService {
         return messageRepository.getPrivateChatHistoryViewData(chatId);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"OptionalGetWithoutIsPresent", "unchecked"})
     private void saveMessage(ChatMessageDTO msg, String chatId, LocalDateTime localDateTime, Long userId) {
-        logger.info("Started saving message to database.");
-        Chat chat = (Chat) chatRepository.getOne(Long.parseLong(chatId));
+        Chat chat = (Chat) chatRepository.findById(Long.parseLong(chatId)).get();
 
         Message newMessage = Message.builder()
                 .senderId(userId)
@@ -78,7 +70,6 @@ public class ChatService {
 
         chat.addMessage(newMessage);
         messageRepository.save(newMessage);
-        logger.info("Finished saving message to database.");
     }
 
 }
