@@ -5,8 +5,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.model.User;
 import pl.edu.agh.sportsApp.model.chat.EventChat;
 import pl.edu.agh.sportsApp.model.chat.PrivateChat;
@@ -14,7 +12,6 @@ import pl.edu.agh.sportsApp.model.notification.MessageNotification;
 import pl.edu.agh.sportsApp.model.notification.Notification;
 import pl.edu.agh.sportsApp.repository.chat.EventChatRepository;
 import pl.edu.agh.sportsApp.repository.chat.PrivateChatRepository;
-import pl.edu.agh.sportsApp.repository.notification.NotificationRepository;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -29,9 +26,9 @@ public class SocketNotificationCreator {
     @NonNull
     PrivateChatRepository privateChatRepository;
 
-    @Transactional
+    @SuppressWarnings({"OptionalGetWithoutIsPresent"})
     public Notification newEventChatMessage(Long chatId, Long userId, LocalDateTime dateTime) {
-        EventChat chat = eventChatRepository.getOne(chatId);
+        EventChat chat = eventChatRepository.findById(chatId).get();
 
         MessageNotification notification = MessageNotification.builder()
                 .chat(chat)
@@ -48,10 +45,10 @@ public class SocketNotificationCreator {
         return notification;
     }
 
-    @Transactional
+    @SuppressWarnings({"OptionalGetWithoutIsPresent"})
     public Notification newPrivateChatMessage(Long chatId, Long userId, LocalDateTime dateTime) {
 
-        PrivateChat chat = privateChatRepository.getOne(chatId);
+        PrivateChat chat = privateChatRepository.findById(chatId).get();
         Map<Long, User> relatedUsers = chat.getParticipants();
         relatedUsers.remove(userId);
 

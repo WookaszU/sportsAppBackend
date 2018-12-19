@@ -1,10 +1,6 @@
 package pl.edu.agh.sportsApp.model.chat;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
+import lombok.*;
 import pl.edu.agh.sportsApp.model.Message;
 import pl.edu.agh.sportsApp.model.notification.Notification;
 
@@ -16,6 +12,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"notifications", "messages"})
 @Entity(name = "chat")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Chat {
@@ -24,11 +21,11 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @Builder.Default
     private Set<Message> messages = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @Builder.Default
     private Set<Notification> notifications = new HashSet<>();
 
