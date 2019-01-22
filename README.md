@@ -1,4 +1,2 @@
 # sportsAppBackend
-d
-
 
